@@ -15,7 +15,7 @@ export default function ProductsView() {
         </Button>
       </div>
       <div
-        className={`w-full md:max-w-[300px] md:border-l-2 border shrink-0 shadow-md px-6 sm:px-8 min-h-screen py-6 ${
+        className={`w-full md:max-w-[300px] md:border-r-2 border shrink-0 shadow-sm px-6 sm:px-8 min-h-screen py-6 ${
           filtersOpen ? 'block' : 'hidden'
         } md:block`}
       >
