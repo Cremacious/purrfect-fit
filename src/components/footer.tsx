@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-purple-500 text-white pt-12 pb-6 px-4 tracking-wide shadow-[0_-8px_24px_-8px_rgba(0,0,0,0.10)]">
+    <footer className="bg-purple-600 text-white pt-12 pb-6 px-4 tracking-wide shadow-[0_-8px_24px_-8px_rgba(0,0,0,0.10)]">
       <div className="text-center">
         <ul className="flex gap-x-8 gap-y-3 justify-center flex-wrap">
           <li>

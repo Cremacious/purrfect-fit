@@ -7,7 +7,7 @@ export default function ProductGrid() {
         <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 mb-6 sm:mb-8 md:text-left text-center">
           Premium Sneakers
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 max-xl:gap-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 max-xl:gap-4 gap-6 mb-4">
           <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-3">
             <Link href={`/product/44`}>
               <div className="aspect-[12/11] bg-gray-100 rounded-lg p-4">
