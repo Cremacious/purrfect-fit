@@ -4,7 +4,7 @@ import ReviewForm from './review-form';
 
 export default function ProductPage() {
   return (
-    <div className="flex flex-col md:p-6 bg-white max-w-7xl mx-auto">
+    <div className="flex flex-col md:p-6 bg-white max-w-7xl mx-auto my-4 rounded-2xl shadow-lg">
       <div className="md:mb-6">
         <ProductDetails />
       </div>
