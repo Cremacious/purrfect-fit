@@ -61,12 +61,12 @@ export default function ProductDetails() {
 
           <div className="w-full">
             <div className="space-y-4">
-              <div className="text-2xl sm:text-xl font-semibold text-slate-900">
+              <div className="text-2xl sm:text-xl font-semibold text-slate-800">
                 SunProtect Sunscreen SPF
               </div>
               <div className="flex items-center gap-3 ">
                 <div className="flex items-center gap-1">
-                  <p className="text-base text-slate-500">4</p>
+                  <p className="text-base text-slate-800">4</p>
                   <svg
                     className="w-3.5 h-3.5 fill-purple-600"
                     viewBox="0 0 14 13"
@@ -109,12 +109,12 @@ export default function ProductDetails() {
                   </svg>
                 </div>
                 <span className="text-slate-500">|</span>
-                <p className="text-sm text-slate-500">76 Ratings</p>
+                <p className="text-sm text-slate-800">76 Ratings</p>
                 <span className="text-slate-500">|</span>
-                <p className="text-sm text-slate-500">50 Reviews</p>
+                <p className="text-sm text-slate-800">50 Reviews</p>
               </div>
               <div className="mt-4">
-                <p className="text-slate-500 mt-1 text-sm">
+                <p className="text-slate-800 mt-1 text-sm">
                   Contains Vitamin E and Green Tea Extract to protect, nourish,
                   and hydrate the skin while providing antioxidant benefits to
                   combat free radicals and promote a healthy complexion.
@@ -164,12 +164,13 @@ export default function ProductDetails() {
                 </div>
               </div>
             </div>
-            <hr className="my-6 border-gray-300" />
 
-            <div className=" md:px-8">
+            <div className=" md:px-8 mt-8">
               <div className="mt-4 grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-2">
                 <div className="flex flex-row gap-4">
-                  <div className="flex items-center text-2xl">Qty:</div>
+                  <div className="flex items-center text-xl text-slate-500">
+                    Qty:
+                  </div>
                   <div className="flex items-center border border-gray-200 py-1 rounded-md w-max">
                     <Button
                       size={'sm'}
