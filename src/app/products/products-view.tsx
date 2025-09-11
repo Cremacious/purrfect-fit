@@ -4,20 +4,16 @@ import { Button } from '@/components/ui/button';
 import ProductGrid from './product-grid';
 import { useState } from 'react';
 
-export default function ProductsView() {
+export default function ProductsView({ animal }: { animal?: string }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row">
-      <div className="md:hidden p-4">
-        <Button className="w-full" onClick={() => setFiltersOpen(!filtersOpen)}>
-          {filtersOpen ? 'Hide Filters' : 'Show Filters'}
-        </Button>
+    <div className="flex">
+      <div className="md:hidden">
+        <Button>View Filters</Button>
       </div>
       <div
-        className={`w-full md:max-w-[300px] shrink-0 px-6 sm:px-8 min-h-screen py-6 ${
-          filtersOpen ? 'block' : 'hidden'
-        } md:block`}
+        className={`w-full max-w-[300px] shrink-0 px-6 sm:px-8 min-h-screen py-6`}
       >
         <div className="flex items-center border-b border-gray-300 pb-2 mb-6">
           <h3 className="text-slate-900 text-lg font-semibold">Filter</h3>
@@ -312,9 +308,8 @@ export default function ProductsView() {
           </div>
         </div>
       </div>
-
       <div className="w-full ">
-        <ProductGrid />
+        <ProductGrid animal={animal} />
       </div>
     </div>
   );

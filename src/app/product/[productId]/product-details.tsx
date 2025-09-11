@@ -61,12 +61,12 @@ export default function ProductDetails() {
 
           <div className="w-full">
             <div className="space-y-4">
-              <div className="text-2xl sm:text-xl font-semibold text-slate-800">
+              <div className="text-2xl sm:text-xl font-semibold text-slate-900">
                 SunProtect Sunscreen SPF
               </div>
               <div className="flex items-center gap-3 ">
                 <div className="flex items-center gap-1">
-                  <p className="text-base text-slate-800">4</p>
+                  <p className="text-base text-slate-500">4</p>
                   <svg
                     className="w-3.5 h-3.5 fill-purple-600"
                     viewBox="0 0 14 13"
@@ -109,12 +109,12 @@ export default function ProductDetails() {
                   </svg>
                 </div>
                 <span className="text-slate-500">|</span>
-                <p className="text-sm text-slate-800">76 Ratings</p>
+                <p className="text-sm text-slate-500">76 Ratings</p>
                 <span className="text-slate-500">|</span>
-                <p className="text-sm text-slate-800">50 Reviews</p>
+                <p className="text-sm text-slate-500">50 Reviews</p>
               </div>
               <div className="mt-4">
-                <p className="text-slate-800 mt-1 text-sm">
+                <p className="text-slate-500 mt-1 text-sm">
                   Contains Vitamin E and Green Tea Extract to protect, nourish,
                   and hydrate the skin while providing antioxidant benefits to
                   combat free radicals and promote a healthy complexion.
@@ -125,100 +125,87 @@ export default function ProductDetails() {
                   $12
                 </h4>
               </div>
-              <div className="flex flex-col gap-1">
-                <div className="text-sm text-slate-500">Size:</div>
-                <div className="flex flex-row flex-wrap gap-2">
-                  {listA.map((item) => (
-                    <Button
-                      key={item}
-                      variant={'outline'}
-                      onClick={() => setOptionA(item)}
-                      className={`text-sm ${
-                        optionA === item
-                          ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
-                          : ''
-                      }`}
-                    >
-                      {item}
-                    </Button>
-                  ))}
-                </div>
+              <div className="flex flex-row gap-1">
+                {listA.map((item) => (
+                  <Button
+                    key={item}
+                    variant={'outline'}
+                    onClick={() => setOptionA(item)}
+                    className={`${
+                      optionA === item
+                        ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
+                        : ''
+                    }`}
+                  >
+                    {item}
+                  </Button>
+                ))}
               </div>
-              <div className="flex flex-col gap-1">
-                <div className="text-sm text-slate-500">Color:</div>
-                <div className="flex flex-row flex-wrap gap-2">
-                  {listB.map((item) => (
-                    <Button
-                      key={item}
-                      variant={'outline'}
-                      onClick={() => setOptionB(item)}
-                      className={`text-sm ${
-                        optionB === item
-                          ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
-                          : ''
-                      }`}
-                    >
-                      {item}
-                    </Button>
-                  ))}
-                </div>
+              <div className="flex flex-row gap-1">
+                {listB.map((item) => (
+                  <Button
+                    key={item}
+                    variant={'outline'}
+                    onClick={() => setOptionA(item)}
+                    className={`${
+                      optionA === item
+                        ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
+                        : ''
+                    }`}
+                  >
+                    {item}
+                  </Button>
+                ))}
               </div>
             </div>
+            <hr className="my-6 border-gray-300" />
 
-            <div className=" md:px-8 mt-8">
-              <div className="mt-4 grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-2">
-                <div className="flex flex-row gap-4">
-                  <div className="flex items-center text-xl text-slate-500">
-                    Qty:
-                  </div>
-                  <div className="flex items-center border border-gray-200 py-1 rounded-md w-max">
-                    <Button
-                      size={'sm'}
-                      variant={'ghost'}
-                      className="border-0 outline-0 cursor-pointer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-1.5 1-2.5"
-                        viewBox="0 0 121.805 121.804"
-                      >
-                        <path
-                          d="M7.308 68.211h107.188a7.309 7.309 0 0 0 7.309-7.31 7.308 7.308 0 0 0-7.309-7.309H7.308a7.31 7.31 0 0 0 0 14.619z"
-                          data-original="#000000"
-                        />
-                      </svg>
-                    </Button>
-                    <span className="text-slate-900 text-sm font-semibold px-6 block">
-                      1
-                    </span>
-                    <Button
-                      size={'sm'}
-                      variant={'ghost'}
-                      className="border-0 outline-0 cursor-pointer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-2.5 h-2.5"
-                        viewBox="0 0 512 512"
-                      >
-                        <path
-                          d="M256 509.892c-19.058 0-34.5-15.442-34.5-34.5V36.608c0-19.058 15.442-34.5 34.5-34.5s34.5 15.442 34.5 34.5v438.784c0 19.058-15.442 34.5-34.5 34.5z"
-                          data-original="#000000"
-                        />
-                        <path
-                          d="M475.392 290.5H36.608c-19.058 0-34.5-15.442-34.5-34.5s15.442-34.5 34.5-34.5h438.784c19.058 0 34.5 15.442 34.5 34.5s-15.442 34.5-34.5 34.5z"
-                          data-original="#000000"
-                        />
-                      </svg>
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="w-full">
-                  <Button size={'lg'} variant={'purple'} className="w-full">
-                    Add to cart
-                  </Button>
-                </div>
+            <div className="mt-4 grid md:grid-cols-2 grid-cols-1 gap-2 bg-red-500 ">
+              <div className="flex gap-4 items-center border border-gray-200 py-1 rounded-md w-max">
+                <Button
+                  size={'sm'}
+                  variant={'ghost'}
+                  className="border-0 outline-0 cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-1.5 1-2.5"
+                    viewBox="0 0 121.805 121.804"
+                  >
+                    <path
+                      d="M7.308 68.211h107.188a7.309 7.309 0 0 0 7.309-7.31 7.308 7.308 0 0 0-7.309-7.309H7.308a7.31 7.31 0 0 0 0 14.619z"
+                      data-original="#000000"
+                    />
+                  </svg>
+                </Button>
+                <span className="text-slate-900 text-sm font-semibold px-6 block">
+                  1
+                </span>
+                <Button
+                  size={'sm'}
+                  variant={'ghost'}
+                  className="border-0 outline-0 cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-2.5 h-2.5"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 509.892c-19.058 0-34.5-15.442-34.5-34.5V36.608c0-19.058 15.442-34.5 34.5-34.5s34.5 15.442 34.5 34.5v438.784c0 19.058-15.442 34.5-34.5 34.5z"
+                      data-original="#000000"
+                    />
+                    <path
+                      d="M475.392 290.5H36.608c-19.058 0-34.5-15.442-34.5-34.5s15.442-34.5 34.5-34.5h438.784c19.058 0 34.5 15.442 34.5 34.5s-15.442 34.5-34.5 34.5z"
+                      data-original="#000000"
+                    />
+                  </svg>
+                </Button>
+              </div>
+              <div>
+                <Button size={'lg'} className="w-full">
+                  Add to cart
+                </Button>
               </div>
             </div>
           </div>
