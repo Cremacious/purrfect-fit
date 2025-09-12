@@ -1,11 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { ProductType } from '@/lib/types/product.type';
 
 const listA = ['X-Small', 'Small', 'Medium', 'Large', 'X-Large'];
 const listB = ['Red', 'Blue', 'Black', 'Green'];
 
-export default function ProductDetails() {
+export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionA, setOptionA] = useState('');
   const [optionB, setOptionB] = useState('');
 
@@ -62,7 +63,7 @@ export default function ProductDetails() {
           <div className="w-full">
             <div className="space-y-4">
               <div className="text-2xl sm:text-xl font-semibold text-slate-800">
-                SunProtect Sunscreen SPF
+                {product.name}
               </div>
               <div className="flex items-center gap-3 ">
                 <div className="flex items-center gap-1">
@@ -115,48 +116,53 @@ export default function ProductDetails() {
               </div>
               <div className="mt-4">
                 <p className="text-slate-800 mt-1 text-sm">
-                  Contains Vitamin E and Green Tea Extract to protect, nourish,
-                  and hydrate the skin while providing antioxidant benefits to
-                  combat free radicals and promote a healthy complexion.
+                  {product.description}
                 </p>
               </div>
               <div className="flex items-center flex-wrap gap-2 ">
                 <h4 className="text-purple-800 text-2xl sm:text-3xl font-semibold">
-                  $12
+                  ${product.price.toFixed(2)}
                 </h4>
               </div>
-              <div className="flex flex-row gap-1">
-                {listA.map((item) => (
-                  <Button
-                    key={item}
-                    variant={'outline'}
-                    onClick={() => setOptionA(item)}
-                    className={`${
-                      optionA === item
-                        ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
-                        : ''
-                    }`}
-                  >
-                    {item}
-                  </Button>
-                ))}
+              <div>
+                <div className="text-sm text-slate-500 ml-1">Size:</div>
+                <div className="flex flex-row gap-1 flex-wrap">
+                  {listA.map((item) => (
+                    <Button
+                      key={item}
+                      variant={'outline'}
+                      onClick={() => setOptionA(item)}
+                      className={`${
+                        optionA === item
+                          ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
+                          : ''
+                      }`}
+                    >
+                      {item}
+                    </Button>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-row gap-1">
-                {listB.map((item) => (
-                  <Button
-                    key={item}
-                    variant={'outline'}
-                    onClick={() => setOptionB(item)}
-                    className={`${
-                      optionB === item
-                        ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
-                        : ''
-                    }`}
-                  >
-                    {item}
-                  </Button>
-                ))}
+              <div>
+                <div className="text-sm text-slate-500 ml-1">Color:</div>
+                <div className="flex flex-row gap-1 flex-wrap">
+                  {listB.map((item) => (
+                    <Button
+                      key={item}
+                      variant={'outline'}
+                      onClick={() => setOptionA(item)}
+                      className={`${
+                        optionB === item
+                          ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
+                          : ''
+                      }`}
+                    >
+                      {item}
+                    </Button>
+                  ))}
+                </div>
               </div>
+
               <div className="mt-4 md:mt-8 grid md:grid-cols-2 grid-cols-1 gap-2">
                 <div className="flex gap-4 items-center border border-gray-200 py-1 rounded-md w-max">
                   <Button

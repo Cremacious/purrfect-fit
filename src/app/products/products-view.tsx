@@ -3,8 +3,15 @@
 import { Button } from '@/components/ui/button';
 import ProductGrid from './product-grid';
 import { useState } from 'react';
+import { ProductType } from '@/lib/types/product.type';
 
-export default function ProductsView({ animal }: { animal?: string }) {
+export default function ProductsView({
+  animal,
+  products,
+}: {
+  animal?: string;
+  products: ProductType[];
+}) {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
@@ -309,7 +316,7 @@ export default function ProductsView({ animal }: { animal?: string }) {
         </div>
       </div>
       <div className="w-full ">
-        <ProductGrid animal={animal} />
+        <ProductGrid animal={animal} products={products} />
       </div>
     </div>
   );

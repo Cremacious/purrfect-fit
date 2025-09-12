@@ -5,13 +5,12 @@ interface ProductsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function ProductsPage({
-  searchParams,
-}: ProductsPageProps) {
-  const animal = searchParams.animal as string;
-  const category = searchParams.category as string;
-  const brand = searchParams.brand as string;
-  const search = searchParams.search as string;
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const params = await searchParams;
+  const animal = params.animal as string;
+  const category = params.category as string;
+  const brand = params.brand as string;
+  const search = params.search as string;
 
   const products = await getProducts({
     animal,
@@ -22,7 +21,7 @@ export default async function ProductsPage({
 
   return (
     <div className="bg-white max-w-7xl mx-auto my-4 rounded-2xl shadow-lg">
-      <ProductsView animal={animal} />
+      <ProductsView animal={animal} products={products} />
 
       {products.length === 0 && (
         <div className="p-8 text-center text-gray-500">
