@@ -1,5 +1,9 @@
+'use server';
 import prisma from '../prisma';
 import { Prisma } from '@prisma/client';
+import { productSchema } from '../validators/product.validator';
+import { z } from 'zod';
+import { getAuthenticatedUser } from '../server-utils';
 
 interface GetProductsParams {
   animal?: string;
@@ -60,23 +64,6 @@ export async function getProducts(params?: GetProductsParams) {
   }));
 }
 
-// export async function getProductBySlug(slug: string) {
-//   try {
-//     const product = await prisma.product.findUnique({
-//       where: { slug },
-//     });
-//     if (!product) throw new Error('Product not found');
-//     return {
-//       ...product,
-//       price: Number(product.price),
-//       rating: Number(product.rating),
-//     };
-//   } catch (error) {
-//     console.error('Error fetching product by slug:', error);
-//     throw error;
-//   }
-// }
-
 export async function getProductBySlug(slug: string) {
   try {
     const product = await prisma.product.findUnique({
@@ -92,5 +79,47 @@ export async function getProductBySlug(slug: string) {
   } catch (error) {
     console.error('Error fetching product by slug with reviews:', error);
     throw error;
+  }
+}
+
+export async function createProduct(data: z.infer<typeof productSchema>) {
+  try {
+    const { user, error } = await getAuthenticatedUser();
+    if (error || !user || user.role !== 'admin') {
+      console.log('Unauthorized attempt to create product');
+      return { success: false, message: 'Unauthorized' };
+    }
+
+    const parsedData = productSchema.parse(data);
+
+    let coverBuffer: Buffer | undefined = undefined;
+    if (parsedData.coverImageBase64) {
+      const base64Part = parsedData.coverImageBase64.includes(',')
+        ? parsedData.coverImageBase64.split(',')[1]
+        : parsedData.coverImageBase64;
+      coverBuffer = Buffer.from(base64Part, 'base64');
+    }
+    await prisma.product.create({
+      data: {
+        name: parsedData.name,
+        slug: parsedData.slug,
+        animal: parsedData.animal,
+        category: parsedData.category,
+        brand: parsedData.brand,
+        description: parsedData.description,
+        // optionALabel: parsedData.optionALabel,
+
+        // optionBLabel: parsedData.optionBLabel,
+
+        price: new Prisma.Decimal(parsedData.price),
+        stock: parsedData.stock,
+        images: coverBuffer ? [coverBuffer.toString('base64')] : [],
+      },
+    });
+    console.log('Product created successfully');
+    return { success: true, message: 'Product created successfully' };
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return { success: false, message: 'Error creating product' };
   }
 }
