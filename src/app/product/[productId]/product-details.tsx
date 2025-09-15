@@ -11,12 +11,12 @@ function getImageSrc(image: string | undefined) {
   return `data:image/jpeg;base64,${image}`;
 }
 
-const listA = ['X-Small', 'Small', 'Medium', 'Large', 'X-Large'];
-const listB = ['Red', 'Blue', 'Black', 'Green'];
+// const listA = ['X-Small', 'Small', 'Medium', 'Large', 'X-Large'];
+// const listB = ['Red', 'Blue', 'Black', 'Green'];
 
 export default function ProductDetails({ product }: { product: ProductType }) {
-  const [optionA, setOptionA] = useState('');
-  const [optionB, setOptionB] = useState('');
+  const [optionAChoice, setOptionAChoice] = useState('');
+  const [optionBChoice, setOptionBChoice] = useState('');
 
   return (
     <div className="p-4 md:mt-8">
@@ -134,52 +134,57 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               <div>
                 {product.variants !== null &&
                   product.variants !== undefined && (
-                    <div className="text-sm text-slate-500 ml-1">
-                      {product.optionALabel}
+                    <div className="text-sm text-slate-500 ml-1 mb-1">
+                      {product.optionALabel}:
                     </div>
                   )}
 
                 <div className="flex flex-row gap-1 flex-wrap">
-                  {[...new Set(product.variants?.map((v) => v.optionA))].map(
-                    (color) => (
-                      <Button key={color} variant="outline">
-                        {color}
-                      </Button>
+                  {[...new Set(product.variants?.map((v) => v.optionA))]
+                    .filter(
+                      (optionA): optionA is string =>
+                        typeof optionA === 'string'
                     )
-                  )}
-                  {/* {listA.map((item) => (
-                    <Button
-                      key={item}
-                      variant={'outline'}
-                      onClick={() => setOptionA(item)}
-                      className={`${
-                        optionA === item
-                          ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
-                          : ''
-                      }`}
-                    >
-                      {item}
-                    </Button>
-                  ))} */}
+                    .map((optionA) => (
+                      <Button
+                        key={optionA}
+                        variant="outline"
+                        onClick={() => setOptionAChoice(optionA)}
+                        className={`${
+                          optionAChoice === optionA
+                            ? 'bg-purple-600 text-white'
+                            : ''
+                        }`}
+                      >
+                        {optionA}
+                      </Button>
+                    ))}
                 </div>
               </div>
               <div>
-                <div className="text-sm text-slate-500 ml-1">Color:</div>
+                {product.variants !== null &&
+                  product.variants !== undefined && (
+                    <div className="text-sm text-slate-500 ml-1 mb-1">
+                      {product.optionBLabel}:
+                    </div>
+                  )}
                 <div className="flex flex-row gap-1 flex-wrap">
-                  {/* {listB.map((item) => (
-                    <Button
-                      key={item}
-                      variant={'outline'}
-                      onClick={() => setOptionA(item)}
-                      className={`${
-                        optionB === item
-                          ? 'bg-purple-600 text-white border-purple-600 hover:bg-purple-700 hover:text-white'
-                          : ''
-                      }`}
-                    >
-                      {item}
-                    </Button>
-                  ))} */}
+                  {[...new Set(product.variants?.map((v) => v.optionB))]
+                    .filter((optionB): optionB is string => typeof optionB === 'string')
+                    .map((optionB) => (
+                      <Button
+                        key={optionB}
+                        variant="outline"
+                        onClick={() => setOptionBChoice(optionB)}
+                        className={`${
+                          optionBChoice === optionB
+                            ? 'bg-purple-600 text-white'
+                            : ''
+                        }`}
+                      >
+                        {optionB}
+                      </Button>
+                    ))}
                 </div>
               </div>
 

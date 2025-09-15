@@ -8,9 +8,15 @@ export const productSchema = z.object({
   brand: z.string().min(1),
   description: z.string(),
   optionALabel: z.string().min(1).optional(),
-  optionA: z.string().min(1).optional(),
   optionBLabel: z.string().min(1).optional(),
-  optionB: z.string().min(1).optional(),
+  variants: z.array(
+    z.object({
+      optionA: z.string().optional(),
+      optionB: z.string().optional(),
+      price: z.number(),
+      stock: z.number(),
+    })
+  ),
   price: z.number(),
   stock: z.number(),
   coverImageBase64: z.string().optional(),

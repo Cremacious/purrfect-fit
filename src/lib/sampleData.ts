@@ -15,6 +15,8 @@ export const products = [
     numReviews: 0,
     isFeatured: true,
     createdAt: new Date(),
+    optionALabel: 'Color',
+    optionBLabel: 'Size',
     variants: [
       { optionA: 'Red', optionB: 'Small', stock: 10, price: 1924.99 },
       { optionA: 'Red', optionB: 'Medium', stock: 5, price: 1924.99 },

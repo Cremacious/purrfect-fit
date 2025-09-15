@@ -1,6 +1,6 @@
 'use client';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -22,18 +22,37 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
 import Image from 'next/image';
 import { productSchema } from '@/lib/validators/product.validator';
 import { createProduct } from '@/lib/actions/product.actions';
+import { toast } from 'sonner';
 
-export default function MyForm() {
+export default function AddProductForm() {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [hasVariants, setHasVariants] = useState(false);
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
+    defaultValues: {
+      variants: [],
+    },
   });
+
+  const { control, watch, reset } = form;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'variants',
+  });
+
+  useEffect(() => {
+    if (hasVariants && fields.length === 0) {
+      append({ optionA: '', optionB: '', price: 0, stock: 0 });
+    }
+    if (!hasVariants && fields.length > 0) {
+      fields.forEach((_, idx) => remove(idx));
+    }
+  }, [hasVariants]);
 
   function onCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -107,10 +126,8 @@ export default function MyForm() {
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
-      console.log(values);
       if (coverFile && coverFile.size > 12 * 1024 * 1024) {
         toast.error('Cover image is too large (max 12MB).');
-
         return;
       }
 
@@ -129,14 +146,13 @@ export default function MyForm() {
       });
       if (response.success) {
         toast.success(response.message);
-        form.reset();
+        reset();
         setCoverFile(null);
         setCoverPreview(null);
       } else {
         toast.error(response.message);
       }
     } catch (error) {
-      console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');
     }
   }
@@ -145,112 +161,108 @@ export default function MyForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto py-10"
+        className="space-y-8 max-w-3xl mx-auto py-10 bg-white rounded-xl shadow-lg p-8"
       >
-        {coverPreview ? (
-          <Image
-            src={coverPreview}
-            alt="Book cover preview"
-            className="object-cover w-full h-full"
-            width={128}
-            height={176}
+        <div className="flex flex-col items-center gap-4">
+          {coverPreview ? (
+            <Image
+              src={coverPreview}
+              alt="Product cover preview"
+              className="object-cover rounded-lg border"
+              width={180}
+              height={180}
+            />
+          ) : (
+            <span className="text-yellow-800 text-5xl">📦</span>
+          )}
+          <FormLabel className="font-semibold text-gray-700">Upload Cover</FormLabel>
+          <input
+            type="file"
+            accept="image/*"
+            className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200 transition"
+            onChange={onCoverChange}
           />
-        ) : (
-          <span className="text-yellow-800 text-5xl">📖</span>
-        )}
+        </div>
 
-        <FormLabel className="font-semibold text-white">Upload Cover</FormLabel>
-        <input
-          type="file"
-          accept="image/*"
-          className="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200 transition"
-          onChange={onCoverChange}
-        />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="" type="text" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Slug</FormLabel>
-              <FormControl>
-                <Input placeholder="" type="text" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="animal"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Animal</FormLabel>
-              <FormControl>
-                <Input placeholder="" type="text" {...field} />
-              </FormControl>
-              <FormDescription>
-                Must be plural (i.e Cats not Cat)
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
+                  <Input placeholder="Product name" type="text" {...field} />
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="brand"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Brand</FormLabel>
-              <FormControl>
-                <Input placeholder="" type="text" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Slug</FormLabel>
+                <FormControl>
+                  <Input placeholder="product-slug" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="animal"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Animal</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g. cats" type="text" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Must be plural (i.e Cats not Cat)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="accessories">Accessories</SelectItem>
+                    <SelectItem value="apparel">Apparel</SelectItem>
+                    <SelectItem value="toys">Toys</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="brand"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Brand</FormLabel>
+                <FormControl>
+                  <Input placeholder="Brand name" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -259,88 +271,33 @@ export default function MyForm() {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="" className="resize-none" {...field} />
+                <Textarea placeholder="Product description" className="resize-none" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-6">
-            <FormField
-              control={form.control}
-              name="optionALabel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Option A Label</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" type="text" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="col-span-6">
-            <FormField
-              control={form.control}
-              name="optionA"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Option A</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" type="text" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+        <div className="flex items-center gap-4">
+          <span className="font-semibold text-gray-700">Does this product have variants?</span>
+          <Button
+            type="button"
+            variant={hasVariants ? "outline" : "purple"}
+            onClick={() => setHasVariants(false)}
+          >
+            No
+          </Button>
+          <Button
+            type="button"
+            variant={hasVariants ? "purple" : "outline"}
+            onClick={() => setHasVariants(true)}
+          >
+            Yes
+          </Button>
         </div>
 
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-6">
-            <FormField
-              control={form.control}
-              name="optionBLabel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Option B Label</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" type="text" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="col-span-6">
-            <FormField
-              control={form.control}
-              name="optionB"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Option B</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" type="text" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-6">
+        {!hasVariants ? (
+          <div className="grid grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="price"
@@ -349,22 +306,18 @@ export default function MyForm() {
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
-                      value={field.value}
+                      value={field.value ?? ''}
                       onChange={(e) => field.onChange(Number(e.target.value))}
-                      placeholder=""
+                      placeholder="Price"
                       type="number"
                       name={field.name}
                       ref={field.ref}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-
-          <div className="col-span-6">
             <FormField
               control={form.control}
               name="stock"
@@ -373,22 +326,91 @@ export default function MyForm() {
                   <FormLabel>Stock</FormLabel>
                   <FormControl>
                     <Input
-                      value={field.value}
+                      value={field.value ?? ''}
                       onChange={(e) => field.onChange(Number(e.target.value))}
-                      placeholder=""
+                      placeholder="Stock"
                       type="number"
                       name={field.name}
                       ref={field.ref}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-        </div>
-        <Button type="submit">Submit</Button>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="optionALabel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Option A Label</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Size" type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="optionBLabel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Option B Label</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Color" type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-4">
+              {fields.map((field, idx) => (
+                <div key={field.id} className="flex gap-2 mb-2 bg-purple-50 p-4 rounded-lg border">
+                  <Input
+                    {...form.register(`variants.${idx}.optionA`)}
+                    placeholder={watch('optionALabel') || 'Option A'}
+                  />
+                  <Input
+                    {...form.register(`variants.${idx}.optionB`)}
+                    placeholder={watch('optionBLabel') || 'Option B'}
+                  />
+                  <Input
+                    {...form.register(`variants.${idx}.price`, {
+                      valueAsNumber: true,
+                    })}
+                    placeholder="Price"
+                    type="number"
+                  />
+                  <Input
+                    {...form.register(`variants.${idx}.stock`, {
+                      valueAsNumber: true,
+                    })}
+                    placeholder="Stock"
+                    type="number"
+                  />
+                  <Button type="button" variant="outline" onClick={() => remove(idx)}>
+                    Remove
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                onClick={() => append({ optionA: '', optionB: '', price: 0, stock: 0 })}
+                variant="purple"
+                className="mb-4"
+              >
+                Add Variant
+              </Button>
+            </div>
+          </>
+        )}
+        <Button type="submit" variant="purple" className="w-full mt-6">Submit</Button>
       </form>
     </Form>
   );
