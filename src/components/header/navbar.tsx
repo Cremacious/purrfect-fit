@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { Heart, ChevronDown, ShoppingCart } from 'lucide-react';
+import { Button } from '../ui/button';
+import AuthButtons from './auth-buttons';
 
 export default function Navbar() {
   return (
@@ -77,9 +79,8 @@ export default function Navbar() {
                     </span>
                   </div>
                 </div>
-                <button className="max-lg:hidden px-5 py-2.5 text-sm font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
-                  Sign In
-                </button>
+                <AuthButtons />
+                {/* Mobile button */}
                 <button id="toggleOpen" className="lg:hidden cursor-pointer">
                   <svg
                     className="w-7 h-7"
