@@ -104,7 +104,7 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         : parsedData.coverImageBase64;
       coverBuffer = Buffer.from(base64Part, 'base64');
     }
-    await prisma.product.create({
+    const product = await prisma.product.create({
       data: {
         name: parsedData.name,
         slug: parsedData.slug,
@@ -112,15 +112,26 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         category: parsedData.category,
         brand: parsedData.brand,
         description: parsedData.description,
-        // optionALabel: parsedData.optionALabel,
-
-        // optionBLabel: parsedData.optionBLabel,
-
         price: new Prisma.Decimal(parsedData.price),
         stock: parsedData.stock,
         images: coverBuffer ? [coverBuffer.toString('base64')] : [],
       },
     });
+
+    // If variants exist, create them
+    if (parsedData.variants && parsedData.variants.length > 0) {
+      await prisma.productVariant.createMany({
+        data: parsedData.variants.map((variant) => ({
+          productId: product.id,
+          optionA: variant.optionA,
+          optionB: variant.optionB,
+          price: new Prisma.Decimal(variant.price),
+          stock: variant.stock,
+          images: [], // You can add image upload logic for variants if needed
+        })),
+      });
+    }
+
     console.log('Product created successfully');
     return { success: true, message: 'Product created successfully' };
   } catch (error) {
