@@ -55,12 +55,17 @@ export async function getProducts(params?: GetProductsParams) {
 
   const products = await prisma.product.findMany({
     where: whereClause,
+    include: { variants: true },
   });
 
   return products.map((product) => ({
     ...product,
     price: Number(product.price),
     rating: Number(product.rating),
+    variants: product.variants.map((variant) => ({
+      ...variant,
+      price: variant.price ? Number(variant.price) : undefined,
+    })),
   }));
 }
 
@@ -68,7 +73,7 @@ export async function getProductBySlug(slug: string) {
   try {
     const product = await prisma.product.findUnique({
       where: { slug },
-      include: { reviews: true },
+      include: { reviews: true, variants: true },
     });
     if (!product) throw new Error('Product not found');
     return {

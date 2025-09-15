@@ -18,7 +18,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     brand,
     search,
   });
-
   return (
     <div className="bg-white max-w-7xl mx-auto my-4 rounded-2xl shadow-lg">
       <ProductsView animal={animal} products={products} />

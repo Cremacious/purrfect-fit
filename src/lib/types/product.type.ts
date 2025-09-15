@@ -8,11 +8,22 @@ export type ProductType = {
   brand: string;
   description: string;
   stock: number;
-  optionA: string[];
-  optionB: string[];
+  optionALabel: string | null;
+  optionBLabel: string | null;
   price: number;
   rating: number;
   numReviews: number;
   isFeatured: boolean;
   createdAt: Date;
+  variants: ProductVariant[];
+};
+
+export type ProductVariant = {
+  id: string;
+  productId: string;
+  optionA?: string | null;
+  optionB?: string | null;
+  price?: number;
+  stock: number;
+  images: string[];
 };
