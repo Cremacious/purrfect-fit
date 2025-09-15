@@ -88,6 +88,8 @@ model Product {
  numReviews  Int       @default(0)
  isFeatured  Boolean   @default(false)
  createdAt   DateTime  @default(now())
+ optionALabel String?
+ optionBLabel String?
  optionA      String[]
  optionB      String[]
  orderItems  OrderItem[]

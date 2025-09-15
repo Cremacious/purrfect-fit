@@ -38,14 +38,18 @@ export default function AuthButtons() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className="flex items-center justify-center mt-2">
-            <UserRound className="text-white w-7 h-7" />
+            <UserRound className="text-white w-7 h-7 cursor-pointer" />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>Profile</DropdownMenuItem>
           <DropdownMenuItem>Billing</DropdownMenuItem>
 
-          {isAdmin && <DropdownMenuItem>Admin Panel</DropdownMenuItem>}
+          {isAdmin && (
+            <DropdownMenuItem onClick={() => router.push('/admin')}>
+              Admin Panel
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem>Team </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>

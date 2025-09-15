@@ -9,8 +9,10 @@ export const products = [
     brand: 'Tactical Kingdom',
     description:
       'A durable and weather-resistant canopy for outdoor events. Fits lions up to 500 lbs.',
+    optionALabel: 'color',
+    optionBLabel: 'size',
     optionA: ['black'],
-    optionB: [''],
+    optionB: ['small, medium, large'],
     stock: 100,
     price: 1924.99,
     rating: 0,
