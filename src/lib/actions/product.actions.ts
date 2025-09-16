@@ -127,7 +127,7 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
           productId: product.id,
           optionA: variant.optionA,
           optionB: variant.optionB,
-          price: new Prisma.Decimal(variant.price),
+          price: new Prisma.Decimal(variant.price ?? parsedData.price),
           stock: variant.stock,
           images: [], // You can add image upload logic for variants if needed
         })),

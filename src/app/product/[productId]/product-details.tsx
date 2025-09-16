@@ -21,6 +21,14 @@ export default function ProductDetails({ product }: { product: ProductType }) {
     (v) => v.optionA === optionAChoice && v.optionB === optionBChoice
   );
 
+  // Ensure price is a number if it's a string
+  const selectedVariantPrice =
+    selectedVariant && selectedVariant.price !== undefined
+      ? typeof selectedVariant.price === 'string'
+        ? Number(selectedVariant.price)
+        : selectedVariant.price
+      : undefined;
+
   // Get all unique optionA and optionB values
   // Filter out null/undefined and ensure only strings are used
   const optionAList = Array.from(
@@ -164,7 +172,24 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               </div>
               <div className="flex items-center flex-wrap gap-2 ">
                 <h4 className="text-purple-800 text-2xl sm:text-3xl font-semibold">
-                  ${product.price.toFixed(2)}
+                  {optionAChoice &&
+                  optionBChoice &&
+                  selectedVariantPrice !== undefined &&
+                  !isNaN(selectedVariantPrice) ? (
+                    <>
+                      ${selectedVariantPrice.toFixed(2)}{' '}
+                      <span className="text-xs text-gray-500">
+                        (variant price)
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      ${product.price.toFixed(2)}{' '}
+                      <span className="text-xs text-gray-500">
+                        (default price)
+                      </span>
+                    </>
+                  )}
                 </h4>
               </div>
               <div className="mt-2 text-sm text-gray-700">

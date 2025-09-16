@@ -45,14 +45,16 @@ export default function AddProductForm() {
     name: 'variants',
   });
 
+  const defaultPrice = watch('price') ?? 0;
+
   useEffect(() => {
     if (hasVariants && fields.length === 0) {
-      append({ optionA: '', optionB: '', price: 0, stock: 0 });
+      append({ optionA: '', optionB: '', price: defaultPrice, stock: 0 });
     }
     if (!hasVariants && fields.length > 0) {
       fields.forEach((_, idx) => remove(idx));
     }
-  }, [hasVariants]);
+  }, [hasVariants, defaultPrice, append, fields, remove]);
 
   function onCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -126,7 +128,6 @@ export default function AddProductForm() {
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
-      console.log('values', values);
       if (coverFile && coverFile.size > 12 * 1024 * 1024) {
         toast.error('Cover image is too large (max 12MB).');
         return;
@@ -287,6 +288,29 @@ export default function AddProductForm() {
             </FormItem>
           )}
         />
+        <div>
+          {' '}
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Default Price</FormLabel>
+                <FormControl>
+                  <Input
+                    value={field.value ?? ''}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    placeholder="Default Price"
+                    type="number"
+                    name={field.name}
+                    ref={field.ref}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex items-center gap-4">
           <span className="font-semibold text-gray-700">
@@ -310,17 +334,17 @@ export default function AddProductForm() {
 
         {!hasVariants ? (
           <div className="grid grid-cols-2 gap-6">
-            <FormField
+            {/* <FormField
               control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Default Price</FormLabel>
                   <FormControl>
                     <Input
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(Number(e.target.value))}
-                      placeholder="Price"
+                      placeholder="Default Price"
                       type="number"
                       name={field.name}
                       ref={field.ref}
@@ -329,7 +353,7 @@ export default function AddProductForm() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="stock"
@@ -422,7 +446,12 @@ export default function AddProductForm() {
               <Button
                 type="button"
                 onClick={() =>
-                  append({ optionA: '', optionB: '', price: 0, stock: 0 })
+                  append({
+                    optionA: '',
+                    optionB: '',
+                    price: defaultPrice,
+                    stock: 0,
+                  })
                 }
                 variant="purple"
                 className="mb-4"
