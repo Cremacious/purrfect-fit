@@ -126,6 +126,7 @@ export default function AddProductForm() {
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
+      console.log('values', values);
       if (coverFile && coverFile.size > 12 * 1024 * 1024) {
         toast.error('Cover image is too large (max 12MB).');
         return;
@@ -175,7 +176,9 @@ export default function AddProductForm() {
           ) : (
             <span className="text-yellow-800 text-5xl">📦</span>
           )}
-          <FormLabel className="font-semibold text-gray-700">Upload Cover</FormLabel>
+          <FormLabel className="font-semibold text-gray-700">
+            Upload Cover
+          </FormLabel>
           <input
             type="file"
             accept="image/*"
@@ -233,7 +236,10 @@ export default function AddProductForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
@@ -271,7 +277,11 @@ export default function AddProductForm() {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Product description" className="resize-none" {...field} />
+                <Textarea
+                  placeholder="Product description"
+                  className="resize-none"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -279,17 +289,19 @@ export default function AddProductForm() {
         />
 
         <div className="flex items-center gap-4">
-          <span className="font-semibold text-gray-700">Does this product have variants?</span>
+          <span className="font-semibold text-gray-700">
+            Does this product have variants?
+          </span>
           <Button
             type="button"
-            variant={hasVariants ? "outline" : "purple"}
+            variant={hasVariants ? 'outline' : 'purple'}
             onClick={() => setHasVariants(false)}
           >
             No
           </Button>
           <Button
             type="button"
-            variant={hasVariants ? "purple" : "outline"}
+            variant={hasVariants ? 'purple' : 'outline'}
             onClick={() => setHasVariants(true)}
           >
             Yes
@@ -371,7 +383,10 @@ export default function AddProductForm() {
             </div>
             <div className="space-y-4">
               {fields.map((field, idx) => (
-                <div key={field.id} className="flex gap-2 mb-2 bg-purple-50 p-4 rounded-lg border">
+                <div
+                  key={field.id}
+                  className="flex gap-2 mb-2 bg-purple-50 p-4 rounded-lg border"
+                >
                   <Input
                     {...form.register(`variants.${idx}.optionA`)}
                     placeholder={watch('optionALabel') || 'Option A'}
@@ -384,6 +399,7 @@ export default function AddProductForm() {
                     {...form.register(`variants.${idx}.price`, {
                       valueAsNumber: true,
                     })}
+                    className="bg-red-200"
                     placeholder="Price"
                     type="number"
                   />
@@ -394,14 +410,20 @@ export default function AddProductForm() {
                     placeholder="Stock"
                     type="number"
                   />
-                  <Button type="button" variant="outline" onClick={() => remove(idx)}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => remove(idx)}
+                  >
                     Remove
                   </Button>
                 </div>
               ))}
               <Button
                 type="button"
-                onClick={() => append({ optionA: '', optionB: '', price: 0, stock: 0 })}
+                onClick={() =>
+                  append({ optionA: '', optionB: '', price: 0, stock: 0 })
+                }
                 variant="purple"
                 className="mb-4"
               >
@@ -410,7 +432,9 @@ export default function AddProductForm() {
             </div>
           </>
         )}
-        <Button type="submit" variant="purple" className="w-full mt-6">Submit</Button>
+        <Button type="submit" variant="purple" className="w-full mt-6">
+          Submit
+        </Button>
       </form>
     </Form>
   );

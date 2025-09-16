@@ -112,9 +112,11 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         category: parsedData.category,
         brand: parsedData.brand,
         description: parsedData.description,
-        price: new Prisma.Decimal(parsedData.price),
-        stock: parsedData.stock,
+        price: new Prisma.Decimal(parsedData.price ?? 0),
+        stock: parsedData.stock ?? 0,
         images: coverBuffer ? [coverBuffer.toString('base64')] : [],
+        optionALabel: parsedData.optionALabel,
+        optionBLabel: parsedData.optionBLabel,
       },
     });
 

@@ -97,7 +97,7 @@ model Product {
 
 model ProductVariant {
   id         String   @id @default(uuid())
-  product    Product  @relation(fields: [productId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId  String
   optionA    String? 
   optionB    String? 
