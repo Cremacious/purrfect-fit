@@ -18,6 +18,39 @@ export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
 
+  // Get all unique optionA and optionB values
+  // Filter out null/undefined and ensure only strings are used
+  const optionAList = Array.from(
+    new Set(
+      product.variants
+        ?.map((v) => v.optionA)
+        .filter((x): x is string => typeof x === 'string')
+    )
+  );
+  const optionBList = Array.from(
+    new Set(
+      product.variants
+        ?.map((v) => v.optionB)
+        .filter((x): x is string => typeof x === 'string')
+    )
+  );
+
+  // For each optionA, check if a variant exists with selected optionB
+  const isOptionAEnabled = (optionA: string) => {
+    if (!optionBChoice) return true;
+    return product.variants?.some(
+      (v) => v.optionA === optionA && v.optionB === optionBChoice
+    );
+  };
+
+  // For each optionB, check if a variant exists with selected optionA
+  const isOptionBEnabled = (optionB: string) => {
+    if (!optionAChoice) return true;
+    return product.variants?.some(
+      (v) => v.optionB === optionB && v.optionA === optionAChoice
+    );
+  };
+
   return (
     <div className="p-4 md:mt-8">
       <div className="lg:max-w-6xl max-w-xl mx-auto">
@@ -70,7 +103,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
           <div className="w-full lg:pl-8 flex flex-col justify-center">
             <div className="space-y-4">
               <div className="text-2xl sm:text-xl font-semibold text-slate-800">
-                {product.name}
+                {product.name} availiable
               </div>
               <div className="flex items-center gap-3 ">
                 <div className="flex items-center gap-1">
@@ -140,25 +173,25 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                   )}
 
                 <div className="flex flex-row gap-1 flex-wrap">
-                  {[...new Set(product.variants?.map((v) => v.optionA))]
-                    .filter(
-                      (optionA): optionA is string =>
-                        typeof optionA === 'string'
-                    )
-                    .map((optionA) => (
-                      <Button
-                        key={optionA}
-                        variant="outline"
-                        onClick={() => setOptionAChoice(optionA)}
-                        className={`${
-                          optionAChoice === optionA
-                            ? 'bg-purple-600 text-white'
-                            : ''
-                        }`}
-                      >
-                        {optionA}
-                      </Button>
-                    ))}
+                  {optionAList.map((optionA) => (
+                    <Button
+                      key={optionA}
+                      variant="outline"
+                      onClick={() => setOptionAChoice(optionA)}
+                      disabled={!isOptionAEnabled(optionA)}
+                      className={`${
+                        optionAChoice === optionA
+                          ? 'bg-purple-600 text-white'
+                          : ''
+                      } ${
+                        !isOptionAEnabled(optionA)
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
+                    >
+                      {optionA}
+                    </Button>
+                  ))}
                 </div>
               </div>
               <div>
@@ -169,22 +202,25 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                     </div>
                   )}
                 <div className="flex flex-row gap-1 flex-wrap">
-                  {[...new Set(product.variants?.map((v) => v.optionB))]
-                    .filter((optionB): optionB is string => typeof optionB === 'string')
-                    .map((optionB) => (
-                      <Button
-                        key={optionB}
-                        variant="outline"
-                        onClick={() => setOptionBChoice(optionB)}
-                        className={`${
-                          optionBChoice === optionB
-                            ? 'bg-purple-600 text-white'
-                            : ''
-                        }`}
-                      >
-                        {optionB}
-                      </Button>
-                    ))}
+                  {optionBList.map((optionB) => (
+                    <Button
+                      key={optionB}
+                      variant="outline"
+                      onClick={() => setOptionBChoice(optionB)}
+                      disabled={!isOptionBEnabled(optionB)}
+                      className={`${
+                        optionBChoice === optionB
+                          ? 'bg-purple-600 text-white'
+                          : ''
+                      } ${
+                        !isOptionBEnabled(optionB)
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
+                    >
+                      {optionB}
+                    </Button>
+                  ))}
                 </div>
               </div>
 
