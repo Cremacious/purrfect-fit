@@ -10,8 +10,12 @@ import Link from 'next/link';
 import { Heart, ChevronDown, ShoppingCart } from 'lucide-react';
 import { Button } from '../ui/button';
 import AuthButtons from './auth-buttons';
+import { useCartStore } from '@/stores/useCartStore';
 
 export default function Navbar() {
+  const cart = useCartStore((state) => state.cart);
+  const cartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="bg-purple-500 shadow-md">
       <div className="flex bg-purple-600 shadow-md py-1 sm:px-6 px-4 min-h-[75px] tracking-wide relative z-50">
@@ -75,7 +79,7 @@ export default function Navbar() {
                   <div className="relative">
                     <ShoppingCart className="cursor-pointer text-white inline w-7 h-7" />
                     <span className="absolute left-auto -ml-1 top-0 rounded-full bg-red-500 px-1 py-0 text-xs text-white">
-                      0
+                      {cartQuantity}
                     </span>
                   </div>
                 </div>

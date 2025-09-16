@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ProductType } from '@/lib/types/product.type';
 import defaultProductImage from '@/assets/stock-product.jpg';
+import AddToCartButton from '@/components/add-to-cart-button';
 
 function getImageSrc(image: string | undefined) {
   if (!image) return defaultProductImage;
@@ -17,11 +18,11 @@ function getImageSrc(image: string | undefined) {
 export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const selectedVariant = product.variants?.find(
     (v) => v.optionA === optionAChoice && v.optionB === optionBChoice
   );
 
-  // Ensure price is a number if it's a string
   const selectedVariantPrice =
     selectedVariant && selectedVariant.price !== undefined
       ? typeof selectedVariant.price === 'string'
@@ -29,8 +30,6 @@ export default function ProductDetails({ product }: { product: ProductType }) {
         : selectedVariant.price
       : undefined;
 
-  // Get all unique optionA and optionB values
-  // Filter out null/undefined and ensure only strings are used
   const optionAList = Array.from(
     new Set(
       product.variants
@@ -46,7 +45,6 @@ export default function ProductDetails({ product }: { product: ProductType }) {
     )
   );
 
-  // For each optionA, check if a variant exists with selected optionB
   const isOptionAEnabled = (optionA: string) => {
     if (!optionBChoice) return true;
     return product.variants?.some(
@@ -54,7 +52,6 @@ export default function ProductDetails({ product }: { product: ProductType }) {
     );
   };
 
-  // For each optionB, check if a variant exists with selected optionA
   const isOptionBEnabled = (optionB: string) => {
     if (!optionAChoice) return true;
     return product.variants?.some(
@@ -284,7 +281,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                     </svg>
                   </Button>
                   <span className="text-slate-900 text-sm font-semibold px-6 block">
-                    1
+                    {quantity}
                   </span>
                   <Button
                     size={'sm'}
@@ -308,13 +305,11 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    size={'lg'}
-                    variant={'purple'}
-                    className="w-full font-bold"
-                  >
-                    Add to cart
-                  </Button>
+                  <AddToCartButton
+                    product={product}
+                    selectedVariant={selectedVariant ?? null}
+                    quantity={quantity}
+                  />
                 </div>
               </div>
             </div>
