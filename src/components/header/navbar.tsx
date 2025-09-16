@@ -76,12 +76,12 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-0.5 cursor-pointer">
-                  <div className="relative">
+                  <Link href="/cart" className="relative">
                     <ShoppingCart className="cursor-pointer text-white inline w-7 h-7" />
                     <span className="absolute left-auto -ml-1 top-0 rounded-full bg-red-500 px-1 py-0 text-xs text-white">
                       {cartQuantity}
                     </span>
-                  </div>
+                  </Link>
                 </div>
                 <AuthButtons />
                 {/* Mobile button */}

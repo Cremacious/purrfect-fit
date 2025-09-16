@@ -80,6 +80,10 @@ export async function getProductBySlug(slug: string) {
       ...product,
       price: Number(product.price),
       rating: Number(product.rating),
+      variants: product.variants.map((variant) => ({
+        ...variant,
+        price: variant.price ? Number(variant.price) : undefined,
+      })),
     };
   } catch (error) {
     console.error('Error fetching product by slug with reviews:', error);
