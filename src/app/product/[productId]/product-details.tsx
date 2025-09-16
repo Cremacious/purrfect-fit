@@ -17,6 +17,9 @@ function getImageSrc(image: string | undefined) {
 export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
+  const selectedVariant = product.variants?.find(
+    (v) => v.optionA === optionAChoice && v.optionB === optionBChoice
+  );
 
   // Get all unique optionA and optionB values
   // Filter out null/undefined and ensure only strings are used
@@ -103,7 +106,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
           <div className="w-full lg:pl-8 flex flex-col justify-center">
             <div className="space-y-4">
               <div className="text-2xl sm:text-xl font-semibold text-slate-800">
-                {product.name} availiable
+                {product.name}
               </div>
               <div className="flex items-center gap-3 ">
                 <div className="flex items-center gap-1">
@@ -164,6 +167,11 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                   ${product.price.toFixed(2)}
                 </h4>
               </div>
+              <div className="mt-2 text-sm text-gray-700">
+                {selectedVariant
+                  ? `Stock: ${selectedVariant.stock}`
+                  : 'Select options to view stock'}
+              </div>
               <div>
                 {product.variants !== null &&
                   product.variants !== undefined && (
@@ -177,7 +185,11 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                     <Button
                       key={optionA}
                       variant="outline"
-                      onClick={() => setOptionAChoice(optionA)}
+                      onClick={() =>
+                        setOptionAChoice(
+                          optionAChoice === optionA ? '' : optionA
+                        )
+                      }
                       disabled={!isOptionAEnabled(optionA)}
                       className={`${
                         optionAChoice === optionA
@@ -206,7 +218,11 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                     <Button
                       key={optionB}
                       variant="outline"
-                      onClick={() => setOptionBChoice(optionB)}
+                      onClick={() =>
+                        setOptionBChoice(
+                          optionBChoice === optionB ? '' : optionB
+                        )
+                      }
                       disabled={!isOptionBEnabled(optionB)}
                       className={`${
                         optionBChoice === optionB
