@@ -26,17 +26,23 @@ import Image from 'next/image';
 import { productSchema } from '@/lib/validators/product.validator';
 import { createProduct } from '@/lib/actions/product.actions';
 import { toast } from 'sonner';
+import Cropper, { Area } from 'react-easy-crop';
 
 export default function AddProductForm() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [defaultImageIndex, setDefaultImageIndex] = useState(0);
-  const [defaultImageCrop, setDefaultImageCrop] = useState<{
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  } | undefined>(undefined);
+  const [defaultImageCrop, setDefaultImageCrop] = useState<
+    | {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      }
+    | undefined
+  >(undefined);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   const [hasVariants, setHasVariants] = useState(false);
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -63,78 +69,71 @@ export default function AddProductForm() {
     }
   }, [hasVariants, defaultPrice, append, fields, remove]);
 
-  function onImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
-    setImageFiles(files);
-    Promise.all(
-      files.map(
-        (file) =>
-          new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          })
-      )
-    ).then(setImagePreviews);
+  async function compressAndResizeImage(
+    file: File,
+    maxWidth = 800,
+    maxHeight = 800,
+    quality = 0.7
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new window.Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          // Resize logic
+          if (width > maxWidth) {
+            height = Math.round((maxWidth / width) * height);
+            width = maxWidth;
+          }
+          if (height > maxHeight) {
+            width = Math.round((maxHeight / height) * width);
+            height = maxHeight;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return reject('No canvas context');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) return reject('Compression failed');
+              const r = new FileReader();
+              r.onloadend = () => resolve(r.result as string);
+              r.onerror = reject;
+              r.readAsDataURL(blob);
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+        img.onerror = reject;
+        img.src = event.target?.result as string;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 
-  // async function resizeAndConvertToBase64(
-  //   file: File,
-  //   maxWidth = 1600,
-  //   maxBytes = 700 * 1024
-  // ) {
-  //   if (file.size <= maxBytes) {
-  //     return new Promise<string>((resolve, reject) => {
-  //       const reader = new FileReader();
-  //       reader.onload = () => resolve(reader.result as string);
-  //       reader.onerror = (err) => reject(err);
-  //       reader.readAsDataURL(file);
-  //     });
-  //   }
+  async function onImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    setImageFiles(files);
+    const compressedPreviews = await Promise.all(
+      files.map((file) => compressAndResizeImage(file, 800, 800, 0.7))
+    );
+    setImagePreviews(compressedPreviews);
+  }
 
-  //   const dataUrl = await new Promise<string>((resolve, reject) => {
-  //     const r = new FileReader();
-  //     r.onload = () => resolve(r.result as string);
-  //     r.onerror = (e) => reject(e);
-  //     r.readAsDataURL(file);
-  //   });
-
-  //   const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-  //     const image = document.createElement('img') as HTMLImageElement;
-  //     image.onload = () => resolve(image);
-  //     image.onerror = () => reject(new Error('Image failed to load'));
-  //     image.src = dataUrl;
-  //   });
-
-  //   const ratio = Math.min(1, maxWidth / img.width);
-  //   const canvas = document.createElement('canvas');
-  //   canvas.width = Math.round(img.width * ratio);
-  //   canvas.height = Math.round(img.height * ratio);
-  //   const ctx = canvas.getContext('2d');
-  //   if (!ctx) throw new Error('Failed to get canvas context');
-  //   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-  //   let quality = 0.9;
-  //   let blob: Blob | null = null;
-  //   while (quality >= 0.35) {
-  //     blob = await new Promise<Blob | null>((resolve) =>
-  //       canvas.toBlob((b) => resolve(b), 'image/jpeg', quality)
-  //     );
-  //     if (!blob) break;
-  //     if (blob.size <= maxBytes) break;
-  //     quality -= 0.1;
-  //   }
-
-  //   if (!blob) throw new Error('Image compression failed');
-
-  //   return new Promise<string>((resolve, reject) => {
-  //     const r = new FileReader();
-  //     r.onload = () => resolve(r.result as string);
-  //     r.onerror = (e) => reject(e);
-  //     r.readAsDataURL(blob as Blob);
-  //   });
-  // }
+  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    setDefaultImageCrop({
+      x: croppedAreaPixels.x,
+      y: croppedAreaPixels.y,
+      width: croppedAreaPixels.width,
+      height: croppedAreaPixels.height,
+    });
+  };
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
@@ -142,9 +141,6 @@ export default function AddProductForm() {
         toast.error('One or more images are too large (max 12MB each).');
         return;
       }
-
-      // Optionally resize/crop images here if needed
-      // For now, use previews as data URLs
       const images = imagePreviews;
 
       const response = await createProduct({
@@ -220,11 +216,32 @@ export default function AddProductForm() {
               <span className="block text-xs text-gray-500 mb-2">
                 Crop Default Image
               </span>
-              {/* TODO: Integrate cropping library here. Save crop data to setDefaultImageCrop */}
-              {/* Example: <Cropper src={imagePreviews[defaultImageIndex]} onCropChange={setDefaultImageCrop} /> */}
-              <span className="block text-xs text-gray-400">
-                (Cropping UI goes here)
-              </span>
+              {imagePreviews[defaultImageIndex] && (
+                <div className="mt-4 w-[300px] h-[300px] relative">
+                  <Cropper
+                    image={imagePreviews[defaultImageIndex]}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                    cropShape="rect"
+                    showGrid={false}
+                  />
+                  <div className="flex gap-2 mt-2">
+                    <label className="text-xs">Zoom</label>
+                    <input
+                      type="range"
+                      min={1}
+                      max={3}
+                      step={0.01}
+                      value={zoom}
+                      onChange={(e) => setZoom(Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

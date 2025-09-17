@@ -108,12 +108,7 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
       ? [parsedData.coverImageBase64]
       : [];
 
-    // Default image index and crop data
-    const defaultImageIndex: number =
-      typeof parsedData.defaultImageIndex === 'number'
-        ? parsedData.defaultImageIndex
-        : 0;
-    const defaultImageCrop = parsedData.defaultImageCrop ?? null; // { x, y, width, height }
+    const defaultImageCrop = parsedData.defaultImageCrop ?? Prisma.JsonNull;
 
     const product = await prisma.product.create({
       data: {
@@ -126,7 +121,10 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         price: new Prisma.Decimal(parsedData.price ?? 0),
         stock: parsedData.stock ?? 0,
         images,
-        defaultImageIndex,
+        defaultImageIndex:
+          typeof parsedData.defaultImageIndex === 'number'
+            ? parsedData.defaultImageIndex
+            : 0,
         defaultImageCrop,
         optionALabel: parsedData.optionALabel,
         optionBLabel: parsedData.optionBLabel,

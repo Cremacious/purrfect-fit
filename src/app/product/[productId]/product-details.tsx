@@ -7,13 +7,16 @@ import defaultProductImage from '@/assets/stock-product.jpg';
 import AddToCartButton from '@/components/add-to-cart-button';
 import { Minus, Plus } from 'lucide-react';
 
-function getImageSrc(image: string | undefined) {
-  if (!image) return defaultProductImage;
-  if (image.startsWith('http') || image.startsWith('data:')) return image;
-  return `data:image/jpeg;base64,${image}`;
-}
-
 export default function ProductDetails({ product }: { product: ProductType }) {
+  // ...existing code...
+  // Cropped image scaling logic
+  const originalWidth = 800;
+  const originalHeight = 800;
+  const displayWidth = 600;
+  const displayHeight = 440;
+  const scaleX = displayWidth / originalWidth;
+  const scaleY = displayHeight / originalHeight;
+  const crop = product.defaultImageCrop;
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -25,12 +28,6 @@ export default function ProductDetails({ product }: { product: ProductType }) {
         (v) => v.optionA === optionAChoice && v.optionB === optionBChoice
       )
     : null;
-  const effectiveStock = hasVariants
-    ? selectedVariant?.stock ?? 0
-    : product.stock ?? 0;
-  const effectivePrice = hasVariants
-    ? selectedVariant?.price ?? product.price
-    : product.price;
 
   const selectedVariantPrice =
     selectedVariant && selectedVariant.price !== undefined
@@ -73,46 +70,57 @@ export default function ProductDetails({ product }: { product: ProductType }) {
       <div className="lg:max-w-6xl max-w-xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
           <div className="w-full lg:sticky top-0 flex flex-col gap-4">
-            <Image
-              src={product.images[0]}
-              alt="Product"
-              width={600}
-              height={440}
-              className="w-full aspect-[11/8] object-cover rounded-2xl"
-              priority
-            />
+            {crop && product.images[product.defaultImageIndex] ? (
+              <div
+                className="rounded-2xl overflow-hidden relative"
+                style={{
+                  width: crop.width * scaleX,
+                  height: crop.height * scaleY,
+                  maxWidth: displayWidth,
+                  maxHeight: displayHeight,
+                }}
+              >
+                <Image
+                  src={product.images[product.defaultImageIndex]}
+                  alt="Product"
+                  width={displayWidth}
+                  height={displayHeight}
+                  style={{
+                    position: 'absolute',
+                    left: -crop.x * scaleX,
+                    top: -crop.y * scaleY,
+                    width: displayWidth,
+                    height: displayHeight,
+                    objectFit: 'cover',
+                  }}
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            ) : (
+              <Image
+                src={
+                  product.images[product.defaultImageIndex] || product.images[0]
+                }
+                alt="Product"
+                width={600}
+                height={440}
+                className="w-full aspect-[11/8] object-cover rounded-2xl"
+                priority
+              />
+            )}
             <div className="bg-white shadow-sm p-2 w-full max-w-full overflow-auto">
               <div className="flex justify-between flex-row gap-4 shrink-0">
-                <img
-                  src="https://readymadeui.com/images/sunscreen-img-1.webp"
-                  alt="Product1"
-                  className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-black"
-                />
-                <img
-                  src="https://readymadeui.com/images/sunscreen-img-2.webp"
-                  alt="Product2"
-                  className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                />
-                <img
-                  src="https://readymadeui.com/images/sunscreen-img-3.webp"
-                  alt="Product3"
-                  className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                />
-                <img
-                  src="https://readymadeui.com/images/sunscreen-img-4.webp"
-                  alt="Product4"
-                  className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                />
-                <img
-                  src="https://readymadeui.com/images/sunscreen-img-5.webp"
-                  alt="Product5"
-                  className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                />
-                <img
-                  src="https://readymadeui.com/images/sunscreen-img-6.webp"
-                  alt="Product6"
-                  className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-transparent"
-                />
+                {product.images.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image}
+                    alt={`Product ${index + 1}`}
+                    width={64}
+                    height={64}
+                    className="w-16 h-16 rounded-md aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-black"
+                  />
+                ))}
               </div>
             </div>
           </div>
