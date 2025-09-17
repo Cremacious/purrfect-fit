@@ -80,6 +80,8 @@ model Product {
  animal    String
  category    String
  images      String[]
+ defaultImageIndex Int @default(0)
+ defaultImageCrop   Json?
  brand       String
  description String
  stock       Int

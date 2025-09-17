@@ -101,6 +101,20 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
 
     const parsedData = productSchema.parse(data);
 
+    // Accept multiple images, default image index, and crop data
+    const images: string[] = Array.isArray(parsedData.images)
+      ? parsedData.images
+      : parsedData.coverImageBase64
+      ? [parsedData.coverImageBase64]
+      : [];
+
+    // Default image index and crop data
+    const defaultImageIndex: number =
+      typeof parsedData.defaultImageIndex === 'number'
+        ? parsedData.defaultImageIndex
+        : 0;
+    const defaultImageCrop = parsedData.defaultImageCrop ?? null; // { x, y, width, height }
+
     const product = await prisma.product.create({
       data: {
         name: parsedData.name,
@@ -111,9 +125,9 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         description: parsedData.description,
         price: new Prisma.Decimal(parsedData.price ?? 0),
         stock: parsedData.stock ?? 0,
-        images: parsedData.coverImageBase64
-          ? [parsedData.coverImageBase64]
-          : [],
+        images,
+        defaultImageIndex,
+        defaultImageCrop,
         optionALabel: parsedData.optionALabel,
         optionBLabel: parsedData.optionBLabel,
       },
@@ -128,7 +142,7 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
           optionB: variant.optionB,
           price: new Prisma.Decimal(variant.price ?? parsedData.price),
           stock: variant.stock,
-          images: [], 
+          images: [],
         })),
       });
     }

@@ -8,16 +8,29 @@ export const productSchema = z
     category: z.string(),
     brand: z.string().min(1),
     description: z.string(),
+    images: z.array(z.string()).optional(),
+    defaultImageIndex: z.number().optional(),
+    defaultImageCrop: z
+      .object({
+        x: z.number(),
+        y: z.number(),
+        width: z.number(),
+        height: z.number(),
+      })
+      .optional(),
     optionALabel: z.string().min(1).optional(),
     optionBLabel: z.string().min(1).optional(),
-    variants: z.array(
-      z.object({
-        optionA: z.string().optional(),
-        optionB: z.string().optional(),
-        price: z.number(),
-        stock: z.number(),
-      })
-    ),
+    variants: z
+      .array(
+        z.object({
+          optionA: z.string().optional(),
+          optionB: z.string().optional(),
+          price: z.number(),
+          stock: z.number(),
+          images: z.array(z.string()).optional(),
+        })
+      )
+      .optional(),
     price: z.number().optional(),
     stock: z.number().optional(),
     coverImageBase64: z.string().optional(),
