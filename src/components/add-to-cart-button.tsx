@@ -14,15 +14,20 @@ export default function AddToCartButton({
 }) {
   const addToCart = useCartStore((state) => state.addToCart);
 
+  const hasVariants =
+    Array.isArray(product.variants) && product.variants.length > 0;
+  const isDisabled = hasVariants
+    ? !selectedVariant || selectedVariant.stock < quantity
+    : product.stock < quantity;
+
   const handleAddToCart = () => {
-    if (!selectedVariant || selectedVariant.stock < quantity) return;
-    console.log('Adding to cart:');
+    if (isDisabled) return;
     addToCart({
       id: product.id,
       name: product.name,
-      price: Number(selectedVariant.price ?? product.price),
-      optionA: selectedVariant.optionA ?? '',
-      optionB: selectedVariant.optionB ?? '',
+      price: Number(selectedVariant?.price ?? product.price),
+      optionA: selectedVariant?.optionA ?? '',
+      optionB: selectedVariant?.optionB ?? '',
       quantity,
       image: product.images[0],
     });
@@ -34,7 +39,7 @@ export default function AddToCartButton({
       variant="purple"
       className="w-full font-bold"
       onClick={handleAddToCart}
-      disabled={!selectedVariant || selectedVariant.stock < quantity}
+      disabled={isDisabled}
     >
       Add to cart
     </Button>

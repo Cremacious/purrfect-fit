@@ -101,13 +101,6 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
 
     const parsedData = productSchema.parse(data);
 
-    let coverBuffer: Buffer | undefined = undefined;
-    if (parsedData.coverImageBase64) {
-      const base64Part = parsedData.coverImageBase64.includes(',')
-        ? parsedData.coverImageBase64.split(',')[1]
-        : parsedData.coverImageBase64;
-      coverBuffer = Buffer.from(base64Part, 'base64');
-    }
     const product = await prisma.product.create({
       data: {
         name: parsedData.name,
@@ -118,7 +111,9 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         description: parsedData.description,
         price: new Prisma.Decimal(parsedData.price ?? 0),
         stock: parsedData.stock ?? 0,
-        images: coverBuffer ? [coverBuffer.toString('base64')] : [],
+        images: parsedData.coverImageBase64
+          ? [parsedData.coverImageBase64]
+          : [],
         optionALabel: parsedData.optionALabel,
         optionBLabel: parsedData.optionBLabel,
       },
@@ -133,7 +128,7 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
           optionB: variant.optionB,
           price: new Prisma.Decimal(variant.price ?? parsedData.price),
           stock: variant.stock,
-          images: [], // You can add image upload logic for variants if needed
+          images: [], 
         })),
       });
     }

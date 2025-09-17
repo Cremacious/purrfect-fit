@@ -17,9 +17,20 @@ export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const selectedVariant = product.variants?.find(
-    (v) => v.optionA === optionAChoice && v.optionB === optionBChoice
-  );
+
+  const hasVariants =
+    Array.isArray(product.variants) && product.variants.length > 0;
+  const selectedVariant = hasVariants
+    ? product.variants?.find(
+        (v) => v.optionA === optionAChoice && v.optionB === optionBChoice
+      )
+    : null;
+  const effectiveStock = hasVariants
+    ? selectedVariant?.stock ?? 0
+    : product.stock ?? 0;
+  const effectivePrice = hasVariants
+    ? selectedVariant?.price ?? product.price
+    : product.price;
 
   const selectedVariantPrice =
     selectedVariant && selectedVariant.price !== undefined
@@ -63,7 +74,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
           <div className="w-full lg:sticky top-0 flex flex-col gap-4">
             <Image
-              src={getImageSrc(product.images[0])}
+              src={product.images[0]}
               alt="Product"
               width={600}
               height={440}
@@ -187,78 +198,83 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                   )}
                 </h4>
               </div>
-              <div className="mt-2 text-sm text-gray-700">
-                {selectedVariant
-                  ? `Stock: ${selectedVariant.stock}`
-                  : 'Select options to view stock'}
-              </div>
-              <div>
-                {product.variants !== null &&
-                  product.variants !== undefined && (
-                    <div className="text-sm text-slate-500 ml-1 mb-1">
-                      {product.optionALabel}:
-                    </div>
-                  )}
+              {/* Variant */}
+              {product.variants !== null && product.variants.length > 0 && (
+                <div>
+                  <div className="mt-2 text-sm text-gray-700">
+                    {selectedVariant
+                      ? `Stock: ${selectedVariant.stock}`
+                      : 'Select options to view stock'}
+                  </div>
+                  <div>
+                    {product.variants !== null &&
+                      product.variants !== undefined && (
+                        <div className="text-sm text-slate-500 ml-1 mb-1">
+                          {product.optionALabel}:
+                        </div>
+                      )}
 
-                <div className="flex flex-row gap-1 flex-wrap">
-                  {optionAList.map((optionA) => (
-                    <Button
-                      key={optionA}
-                      variant="outline"
-                      onClick={() =>
-                        setOptionAChoice(
-                          optionAChoice === optionA ? '' : optionA
-                        )
-                      }
-                      disabled={!isOptionAEnabled(optionA)}
-                      className={`${
-                        optionAChoice === optionA
-                          ? 'bg-purple-600 text-white'
-                          : ''
-                      } ${
-                        !isOptionAEnabled(optionA)
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ''
-                      }`}
-                    >
-                      {optionA}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                {product.variants !== null &&
-                  product.variants !== undefined && (
-                    <div className="text-sm text-slate-500 ml-1 mb-1">
-                      {product.optionBLabel}:
+                    <div className="flex flex-row gap-1 flex-wrap">
+                      {optionAList.map((optionA) => (
+                        <Button
+                          key={optionA}
+                          variant="outline"
+                          onClick={() =>
+                            setOptionAChoice(
+                              optionAChoice === optionA ? '' : optionA
+                            )
+                          }
+                          disabled={!isOptionAEnabled(optionA)}
+                          className={`${
+                            optionAChoice === optionA
+                              ? 'bg-purple-600 text-white'
+                              : ''
+                          } ${
+                            !isOptionAEnabled(optionA)
+                              ? 'opacity-50 cursor-not-allowed'
+                              : ''
+                          }`}
+                        >
+                          {optionA}
+                        </Button>
+                      ))}
                     </div>
-                  )}
-                <div className="flex flex-row gap-1 flex-wrap">
-                  {optionBList.map((optionB) => (
-                    <Button
-                      key={optionB}
-                      variant="outline"
-                      onClick={() =>
-                        setOptionBChoice(
-                          optionBChoice === optionB ? '' : optionB
-                        )
-                      }
-                      disabled={!isOptionBEnabled(optionB)}
-                      className={`${
-                        optionBChoice === optionB
-                          ? 'bg-purple-600 text-white'
-                          : ''
-                      } ${
-                        !isOptionBEnabled(optionB)
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ''
-                      }`}
-                    >
-                      {optionB}
-                    </Button>
-                  ))}
+                  </div>
+                  <div>
+                    {product.variants !== null &&
+                      product.variants !== undefined && (
+                        <div className="text-sm text-slate-500 ml-1 mb-1">
+                          {product.optionBLabel}:
+                        </div>
+                      )}
+                    <div className="flex flex-row gap-1 flex-wrap">
+                      {optionBList.map((optionB) => (
+                        <Button
+                          key={optionB}
+                          variant="outline"
+                          onClick={() =>
+                            setOptionBChoice(
+                              optionBChoice === optionB ? '' : optionB
+                            )
+                          }
+                          disabled={!isOptionBEnabled(optionB)}
+                          className={`${
+                            optionBChoice === optionB
+                              ? 'bg-purple-600 text-white'
+                              : ''
+                          } ${
+                            !isOptionBEnabled(optionB)
+                              ? 'opacity-50 cursor-not-allowed'
+                              : ''
+                          }`}
+                        >
+                          {optionB}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="mt-4 md:mt-8 grid md:grid-cols-2 grid-cols-1 gap-2">
                 <div className="flex gap-4 items-center border border-gray-200 py-1 px-2 rounded-md w-max">
