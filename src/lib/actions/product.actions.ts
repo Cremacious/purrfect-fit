@@ -140,6 +140,12 @@ export async function getProductBySlug(slug: string) {
         price: variant.price ? Number(variant.price) : undefined,
       })),
       defaultImageCrop,
+      optionALabel: product.optionALabel ?? '',
+      optionBLabel: product.optionBLabel ?? '',
+      defaultImageIndex:
+        typeof product.defaultImageIndex === 'number'
+          ? product.defaultImageIndex
+          : 0,
     };
   } catch (error) {
     console.error('Error fetching product by slug with reviews:', error);
