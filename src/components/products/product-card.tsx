@@ -35,7 +35,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
           })}
         </h6>
       </div>
-      <p className="text-slate-600 text-[13px] mt-2">{product.description}</p>
+      <p className="text-slate-600 text-[13px] line-clamp-3 mt-2">{product.description}</p>
 
       <div className="flex flex-row items-center gap-2 mt-6  w-full">
         <div

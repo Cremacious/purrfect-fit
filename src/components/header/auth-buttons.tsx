@@ -28,7 +28,7 @@ export default function AuthButtons() {
 
   if (!session) {
     return (
-      <div>
+      <div className='hidden md:flex'>
         <Button asChild variant={'secondary'} className="font-bold">
           <Link href="/sign-in">Sign In</Link>
         </Button>

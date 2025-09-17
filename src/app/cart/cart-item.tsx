@@ -4,6 +4,7 @@ import { useCartStore } from '@/stores/useCartStore';
 import { Plus, Minus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 
+
 export default function CartItem({ item }: { item: CartItemType }) {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);

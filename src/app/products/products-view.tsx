@@ -15,12 +15,16 @@ export default function ProductsView({
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
-    <div className="flex">
-      <div className="md:hidden">
-        <Button>View Filters</Button>
+    <div className="flex flex-col md:flex-row">
+      <div className="md:hidden p-4">
+        <Button className="w-full" onClick={() => setFiltersOpen(!filtersOpen)}>
+          {filtersOpen ? 'Hide Filters' : 'Show Filters'}
+        </Button>
       </div>
       <div
-        className={`w-full max-w-[300px] shrink-0 px-6 sm:px-8 min-h-screen py-6`}
+        className={`w-full md:max-w-[300px] md:border-l-2 border shrink-0 shadow-md px-6 sm:px-8 min-h-screen py-6 ${
+          filtersOpen ? 'block' : 'hidden'
+        } md:block`}
       >
         <div className="flex items-center border-b border-gray-300 pb-2 mb-6">
           <h3 className="text-slate-900 text-lg font-semibold">Filter</h3>
@@ -315,6 +319,7 @@ export default function ProductsView({
           </div>
         </div>
       </div>
+
       <div className="w-full ">
         <ProductGrid animal={animal} products={products} />
       </div>

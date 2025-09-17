@@ -27,7 +27,6 @@ import { productSchema } from '@/lib/validators/product.validator';
 import { createProduct } from '@/lib/actions/product.actions';
 import { toast } from 'sonner';
 
-
 export default function AddProductForm() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -116,21 +115,30 @@ export default function AddProductForm() {
     setImagePreviews(compressedPreviews);
   }
 
- 
-
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
       if (imageFiles.some((file) => file.size > 12 * 1024 * 1024)) {
         toast.error('One or more images are too large (max 12MB each).');
         return;
       }
-      const images = imagePreviews;
+      // Move selected default image to index 0
+      const images = [...imagePreviews];
+      if (
+        typeof defaultImageIndex === 'number' &&
+        images.length > 1 &&
+        defaultImageIndex > 0 &&
+        defaultImageIndex < images.length
+      ) {
+        const [defaultImg] = images.splice(defaultImageIndex, 1);
+        images.unshift(defaultImg);
+      }
 
       const response = await createProduct({
         ...values,
         images,
-        defaultImageIndex,
+        defaultImageIndex: 0,
       });
+
       if (response.success) {
         toast.success(response.message);
         reset();
@@ -191,13 +199,12 @@ export default function AddProductForm() {
             className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200 transition"
             onChange={onImagesChange}
           />
-      
+
           {imagePreviews[defaultImageIndex] && (
             <div className="mt-4">
               <span className="block text-xs text-gray-500 mb-2">
                 Crop Default Image
               </span>
-          
             </div>
           )}
         </div>
