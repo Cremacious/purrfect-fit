@@ -3,23 +3,20 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ProductType } from '@/lib/types/product.type';
-import defaultProductImage from '@/assets/stock-product.jpg';
 import AddToCartButton from '@/components/add-to-cart-button';
 import { Minus, Plus } from 'lucide-react';
 
 export default function ProductDetails({ product }: { product: ProductType }) {
-  // ...existing code...
-  // Cropped image scaling logic
   const originalWidth = 800;
   const originalHeight = 800;
-  const displayWidth = 600;
-  const displayHeight = 440;
-  const scaleX = displayWidth / originalWidth;
-  const scaleY = displayHeight / originalHeight;
-  const crop = product.defaultImageCrop;
+  const displayWidth = 350;
+  const displayHeight = 400;
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [mainImageIndex, setMainImageIndex] = useState(
+    product.defaultImageIndex ?? 0
+  );
 
   const hasVariants =
     Array.isArray(product.variants) && product.variants.length > 0;
@@ -66,67 +63,66 @@ export default function ProductDetails({ product }: { product: ProductType }) {
   };
 
   return (
-    <div className="p-4 md:mt-8">
+    <div className="p-2 md:p-4 md:mt-8">
       <div className="lg:max-w-6xl max-w-xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
-          <div className="w-full lg:sticky top-0 flex flex-col gap-4">
-            {crop && product.images[product.defaultImageIndex] ? (
-              <div
-                className="rounded-2xl overflow-hidden relative"
-                style={{
-                  width: crop.width * scaleX,
-                  height: crop.height * scaleY,
-                  maxWidth: displayWidth,
-                  maxHeight: displayHeight,
-                }}
-              >
-                <Image
-                  src={product.images[product.defaultImageIndex]}
-                  alt="Product"
-                  width={displayWidth}
-                  height={displayHeight}
-                  style={{
-                    position: 'absolute',
-                    left: -crop.x * scaleX,
-                    top: -crop.y * scaleY,
-                    width: displayWidth,
-                    height: displayHeight,
-                    objectFit: 'cover',
-                  }}
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            ) : (
+          <div className="w-full lg:sticky top-0 flex flex-col items-center gap-4 bg-purple-100 shadow-sm pb-4 p-2 rounded-2xl border">
+            <div className="text-center w-full font-medium text-gray-600">
+              Click an image to zoom in
+            </div>
+            <div
+              className="rounded-2xl overflow-hidden relative w-full flex justify-center items-center"
+              style={{
+                width: '100%',
+                maxWidth: displayWidth,
+                height: 'auto',
+                minHeight: displayHeight,
+              }}
+            >
               <Image
-                src={
-                  product.images[product.defaultImageIndex] || product.images[0]
-                }
+                src={product.images[mainImageIndex]}
                 alt="Product"
-                width={600}
-                height={440}
-                className="w-full aspect-[11/8] object-cover rounded-2xl"
+                width={originalWidth}
+                height={originalHeight}
+                style={{
+                  objectFit: 'cover',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                }}
+                className="object-cover w-full h-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
                 priority
               />
-            )}
-            <div className="bg-white shadow-sm p-2 w-full max-w-full overflow-auto">
+            </div>
+            <div className="bg-white shadow-md p-4 w-full max-w-full overflow-auto rounded-2xl border">
               <div className="flex justify-between flex-row gap-4 shrink-0">
-                {product.images.map((image, index) => (
-                  <Image
-                    key={index}
-                    src={image}
-                    alt={`Product ${index + 1}`}
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 rounded-md aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-black"
-                  />
-                ))}
+                <div className="flex justify-between flex-row gap-4 shrink-0">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setMainImageIndex(index)}
+                      className={`focus:outline-none ${
+                        index === mainImageIndex ? 'ring-2 ring-purple-500' : ''
+                      }`}
+                    >
+                      <Image
+                        src={image}
+                        alt={`Product ${index + 1}`}
+                        width={64}
+                        height={64}
+                        className="w-16 h-16 rounded-md aspect-square object-cover object-top cursor-pointer shadow-lg"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="w-full lg:pl-8 flex flex-col justify-center">
+          <div className="w-full lg:pl-8 flex flex-col  bg-white shadow-sm p-2 rounded-2xl border">
             <div className="space-y-4">
+              <div>Brand:</div>
+              <div>{product.brand}</div>
               <div className="text-2xl sm:text-xl font-semibold text-slate-800">
                 {product.name}
               </div>
@@ -180,6 +176,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 <p className="text-sm text-slate-800">50 Reviews</p>
               </div>
               <div className="mt-4">
+                <p className="text-sm text-slate-500">Description:</p>
                 <p className="text-slate-800 mt-1 text-sm">
                   {product.description}
                 </p>

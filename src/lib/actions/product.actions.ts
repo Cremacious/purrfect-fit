@@ -5,6 +5,7 @@ import { productSchema } from '../validators/product.validator';
 import { z } from 'zod';
 import { getAuthenticatedUser } from '../server-utils';
 
+
 interface GetProductsParams {
   animal?: string;
   category?: string;
@@ -76,6 +77,28 @@ export async function getProductBySlug(slug: string) {
       include: { reviews: true, variants: true },
     });
     if (!product) throw new Error('Product not found');
+    let defaultImageCrop:
+      | { x: number; y: number; width: number; height: number }
+      | undefined = undefined;
+    if (
+      product.defaultImageCrop &&
+      typeof product.defaultImageCrop === 'object'
+    ) {
+      const crop = product.defaultImageCrop as { x: number; y: number; width: number; height: number };
+      if (
+        typeof crop.x === 'number' &&
+        typeof crop.y === 'number' &&
+        typeof crop.width === 'number' &&
+        typeof crop.height === 'number'
+      ) {
+        defaultImageCrop = {
+          x: crop.x,
+          y: crop.y,
+          width: crop.width,
+          height: crop.height,
+        };
+      }
+    }
     return {
       ...product,
       price: Number(product.price),
@@ -84,6 +107,7 @@ export async function getProductBySlug(slug: string) {
         ...variant,
         price: variant.price ? Number(variant.price) : undefined,
       })),
+      defaultImageCrop,
     };
   } catch (error) {
     console.error('Error fetching product by slug with reviews:', error);
@@ -101,7 +125,6 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
 
     const parsedData = productSchema.parse(data);
 
-    // Accept multiple images, default image index, and crop data
     const images: string[] = Array.isArray(parsedData.images)
       ? parsedData.images
       : parsedData.coverImageBase64
@@ -131,7 +154,6 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
       },
     });
 
-    // If variants exist, create them
     if (parsedData.variants && parsedData.variants.length > 0) {
       await prisma.productVariant.createMany({
         data: parsedData.variants.map((variant) => ({
