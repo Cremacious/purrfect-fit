@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCartStore } from '@/stores/useCartStore';
 
 export default function AuthButtons() {
+  const clearCart = useCartStore((state) => state.clearCart);
   const { data: session } = useSession();
   const isAdmin = session?.user.email === 'admin@gmail.com';
 
@@ -21,6 +23,7 @@ export default function AuthButtons() {
   const handleSignOut = async () => {
     await signOut();
     router.push('/');
+    clearCart();
   };
 
   if (!session) {

@@ -87,23 +87,44 @@ export async function removeItemFromCartServer(cartItems: CartItemType[]) {
   }
 }
 
+export async function updateItemQuantityServer(cartItems: CartItemType[]) {
+  try {
+    const auth = await getAuthenticatedUser();
+    const userId = auth.user?.id;
+    const plainCartItems = convertToPlainObject(cartItems);
+    const calcItemsPrice = (items: CartItemType[]) => {
+      return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    };
+    if (userId) {
+      const itemsPrice = calcItemsPrice(plainCartItems);
+      await prisma.cart.update({
+        where: { userId },
+        data: {
+          items: plainCartItems,
+          itemsPrice,
+          taxPrice: 0,
+          totalPrice: 0,
+        },
+      });
+    } else {
+      const cookieStore = await cookies();
+      cookieStore.set('guest_cart', JSON.stringify(plainCartItems), {
+        httpOnly: false,
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+  } catch (error) {
+    console.error('Error in updateItemQuantityServer:', error);
+  }
+}
+
 export async function getUserCart() {
   try {
     const { user } = await getAuthenticatedUser();
-    if (user) {
-      const cart = await prisma.cart.findUnique({ where: { userId: user.id } });
-      if (!cart) return [];
-      return cart.items || [];
-    } else {
-      const cookieStore = await cookies();
-      const guestCart = cookieStore.get('guest_cart');
-      if (!guestCart?.value) return [];
-      try {
-        return JSON.parse(guestCart.value);
-      } catch {
-        return [];
-      }
-    }
+    if (!user) throw new Error('User not authenticated');
+    const cart = await prisma.cart.findUnique({ where: { userId: user.id } });
+    if (!cart) throw new Error('Cart not found');
+    return cart;
   } catch (error) {
     console.error('Error in getUserCart:', error);
     return null;
@@ -113,8 +134,6 @@ export async function getUserCart() {
 export async function getCheckoutCart() {}
 
 export async function getCartForOrder() {}
-
-export async function updateItemQuantityServer(cartItems: CartItemType[]) {}
 
 export async function mergeGuestCartToUserCart() {}
 

@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-// import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 import { signUp } from '@/lib/auth-client';
 
 export const signUpSchema = z
@@ -29,6 +29,7 @@ export const signUpSchema = z
   });
 
 export default function SignUpForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
   });
@@ -36,17 +37,12 @@ export default function SignUpForm() {
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
     try {
       console.log(values);
-      const res = await signUp.email({
+      await signUp.email({
         name: values.email,
         email: values.email,
         password: values.password,
       });
-      console.log(res);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
+      router.push('/');
     } catch (error) {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');

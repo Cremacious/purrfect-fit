@@ -5,15 +5,13 @@ import { Button } from '@/components/ui/button';
 import { ProductType } from '@/lib/types/product.type';
 import defaultProductImage from '@/assets/stock-product.jpg';
 import AddToCartButton from '@/components/add-to-cart-button';
+import { Minus, Plus } from 'lucide-react';
 
 function getImageSrc(image: string | undefined) {
   if (!image) return defaultProductImage;
   if (image.startsWith('http') || image.startsWith('data:')) return image;
   return `data:image/jpeg;base64,${image}`;
 }
-
-// const listA = ['X-Small', 'Small', 'Medium', 'Large', 'X-Large'];
-// const listB = ['Red', 'Blue', 'Black', 'Green'];
 
 export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
@@ -263,22 +261,14 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               </div>
 
               <div className="mt-4 md:mt-8 grid md:grid-cols-2 grid-cols-1 gap-2">
-                <div className="flex gap-4 items-center border border-gray-200 py-1 rounded-md w-max">
+                <div className="flex gap-4 items-center border border-gray-200 py-1 px-2 rounded-md w-max">
                   <Button
                     size={'sm'}
                     variant={'ghost'}
                     className="border-0 outline-0 cursor-pointer"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-1.5 1-2.5"
-                      viewBox="0 0 121.805 121.804"
-                    >
-                      <path
-                        d="M7.308 68.211h107.188a7.309 7.309 0 0 0 7.309-7.31 7.308 7.308 0 0 0-7.309-7.309H7.308a7.31 7.31 0 0 0 0 14.619z"
-                        data-original="#000000"
-                      />
-                    </svg>
+                    <Minus className="w-4 h-4" />
                   </Button>
                   <span className="text-slate-900 text-sm font-semibold px-6 block">
                     {quantity}
@@ -287,21 +277,9 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                     size={'sm'}
                     variant={'ghost'}
                     className="border-0 outline-0 cursor-pointer"
+                    onClick={() => setQuantity(quantity + 1)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-2.5 h-2.5"
-                      viewBox="0 0 512 512"
-                    >
-                      <path
-                        d="M256 509.892c-19.058 0-34.5-15.442-34.5-34.5V36.608c0-19.058 15.442-34.5 34.5-34.5s34.5 15.442 34.5 34.5v438.784c0 19.058-15.442 34.5-34.5 34.5z"
-                        data-original="#000000"
-                      />
-                      <path
-                        d="M475.392 290.5H36.608c-19.058 0-34.5-15.442-34.5-34.5s15.442-34.5 34.5-34.5h438.784c19.058 0 34.5 15.442 34.5 34.5s-15.442 34.5-34.5 34.5z"
-                        data-original="#000000"
-                      />
-                    </svg>
+                    <Plus className="w-4 h-4" />
                   </Button>
                 </div>
                 <div>

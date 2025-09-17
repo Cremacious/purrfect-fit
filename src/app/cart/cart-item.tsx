@@ -1,77 +1,96 @@
 'use client';
 import { CartItemType } from '@/lib/types/cart.type';
+import { useCartStore } from '@/stores/useCartStore';
+import { Plus, Minus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function CartItem({ item }: { item: CartItemType }) {
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
+
+  // Helper for option display
+  const optionsDisplay =
+    item.optionA && item.optionB
+      ? `${item.optionA} | ${item.optionB}`
+      : item.optionA
+      ? item.optionA
+      : item.optionB
+      ? item.optionB
+      : null;
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 items-start sm:gap-4 gap-6 ">
-      <div className="col-span-2 flex items-start gap-4">
-        <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0 bg-gray-00 p-3 rounded-md">
-          <img
-            src="https://readymadeui.com/images/product14.webp"
-            className="w-full h-full object-contain"
-          />
-        </div>
-        <div className="flex flex-col">
-          <h3 className="text-base font-semibold text-slate-900">
+    <div className="flex items-center gap-6 bg-white rounded-xl shadow-md p-4 mb-4 border border-gray-100 relative">
+      {/* Image */}
+      <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center">
+        <Image
+          src={item.image ?? '/placeholder.png'}
+          alt={item.name}
+          width={96}
+          height={96}
+          className="object-contain w-full h-full"
+        />
+      </div>
+      {/* Details */}
+      <div className="flex-1 flex flex-col justify-between min-w-0">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900 truncate">
             {item.name}
           </h3>
-          <p className="text-sm font-medium text-slate-500 mt-2">
-            {item.optionA} {item.optionB}
-          </p>
+          <span className="text-lg font-bold text-purple-700 ml-4">
+            ${item.price}
+          </span>
+        </div>
+        {optionsDisplay && (
+          <div className="text-sm text-gray-500 mt-1">{optionsDisplay}</div>
+        )}
+        <div className="flex items-center gap-2 mt-4">
           <button
             type="button"
-            className="mt-6 font-semibold text-red-500 text-xs flex items-center gap-2 shrink-0 cursor-pointer"
+            aria-label="Decrease quantity"
+            className="p-2 rounded-md border border-gray-300 bg-gray-50 hover:bg-gray-100 transition"
+            onClick={() =>
+              updateItemQuantity(
+                item.id,
+                item.optionA ?? '',
+                item.optionB ?? '',
+                Math.max(1, item.quantity - 1)
+              )
+            }
+            disabled={item.quantity <= 1}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 fill-current inline"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
-                data-original="#000000"
-              />
-              <path
-                d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
-                data-original="#000000"
-              />
-            </svg>
-            REMOVE
+            <Minus className="w-4 h-4 text-gray-600" />
+          </button>
+          <span className="px-3 py-1 rounded bg-gray-100 text-gray-900 font-medium min-w-[2rem] text-center">
+            {item.quantity}
+          </span>
+          <button
+            type="button"
+            aria-label="Increase quantity"
+            className="p-2 rounded-md border border-gray-300 bg-gray-50 hover:bg-gray-100 transition"
+            onClick={() =>
+              updateItemQuantity(
+                item.id,
+                item.optionA ?? '',
+                item.optionB ?? '',
+                item.quantity + 1
+              )
+            }
+          >
+            <Plus className="w-4 h-4 text-gray-600" />
           </button>
         </div>
       </div>
-      <div className="sm:ml-auto max-sm:flex max-sm:justify-between max-sm:gap-4 max-sm:col-span-full">
-        <h4 className="text-base font-semibold text-slate-900">
-          ${item.price}
-        </h4>
-        <div className="flex items-center px-2.5 py-1.5 border border-gray-300 text-slate-900 text-xs font-medium rounded-md sm:mt-6">
-          <span className="cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-2.5 fill-current"
-              viewBox="0 0 124 124"
-            >
-              <path
-                d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                data-original="#000000"
-              />
-            </svg>
-          </span>
-          <span className="mx-3">{item.quantity}</span>
-          <span className="cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-2.5 fill-current"
-              viewBox="0 0 42 42"
-            >
-              <path
-                d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                data-original="#000000"
-              />
-            </svg>
-          </span>
-        </div>
-      </div>
+      {/* Remove button in bottom right */}
+      <button
+        type="button"
+        aria-label="Remove item"
+        className="absolute bottom-4 right-4 px-3 py-1 rounded-md bg-red-50 text-red-600 font-semibold border border-red-200 hover:bg-red-100 transition cursor-pointer"
+        onClick={() =>
+          removeFromCart(item.id, item.optionA ?? '', item.optionB ?? '')
+        }
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
     </div>
   );
 }
