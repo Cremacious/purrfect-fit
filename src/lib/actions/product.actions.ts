@@ -87,6 +87,12 @@ export async function getProducts(params?: GetProductsParams) {
         price: variant.price ? Number(variant.price) : undefined,
       })),
       defaultImageCrop,
+      optionALabel: product.optionALabel ?? '',
+      optionBLabel: product.optionBLabel ?? '',
+      defaultImageIndex:
+        typeof product.defaultImageIndex === 'number'
+          ? product.defaultImageIndex
+          : 0,
     };
   });
 }
