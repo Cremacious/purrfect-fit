@@ -3,19 +3,25 @@ import { Button } from '../ui/button';
 import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import { ProductType } from '@/lib/types/product.type';
-import lion from '@/assets/product-images/lion-parachute.png';
 
 export default function ProductCard({ product }: { product: ProductType }) {
+  const defaultIndex = product.defaultImageIndex ?? 0;
+  const imageSrc = product.images?.[defaultIndex];
   return (
     <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-3">
-      <div className="aspect-[12/11] bg-gray-100 rounded-lg ">
-        <Image
-          src={lion}
-          alt={product.name}
-          className="w-full h-full object-cover rounded-xl"
-          width={300}
-          height={300}
-        />
+      <div className="aspect-[12/11] bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+        {imageSrc ? (
+          <Image
+            src={imageSrc}
+            alt={product.name}
+            className="w-full h-full object-cover rounded-xl"
+            width={300}
+            height={300}
+            priority
+          />
+        ) : (
+          <span className="text-5xl text-gray-400">📦</span>
+        )}
       </div>
       <div className="flex gap-2 mt-4">
         <h5 className="text-base font-semibold text-slate-900">

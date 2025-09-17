@@ -16,7 +16,8 @@ export type CartItemType = {
   optionA: string;
   optionB: string;
   quantity: number;
-  image?: string;
+  image?: string[];
+  defaultImageIndex?: number;
 };
 
 export type CheckoutCartType = {

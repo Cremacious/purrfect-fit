@@ -5,7 +5,6 @@ import { productSchema } from '../validators/product.validator';
 import { z } from 'zod';
 import { getAuthenticatedUser } from '../server-utils';
 
-
 interface GetProductsParams {
   animal?: string;
   category?: string;
@@ -59,15 +58,37 @@ export async function getProducts(params?: GetProductsParams) {
     include: { variants: true },
   });
 
-  return products.map((product) => ({
-    ...product,
-    price: Number(product.price),
-    rating: Number(product.rating),
-    variants: product.variants.map((variant) => ({
-      ...variant,
-      price: variant.price ? Number(variant.price) : undefined,
-    })),
-  }));
+  return products.map((product) => {
+    let defaultImageCrop:
+      | { x: number; y: number; width: number; height: number }
+      | undefined = undefined;
+    if (
+      product.defaultImageCrop &&
+      typeof product.defaultImageCrop === 'object' &&
+      'x' in product.defaultImageCrop &&
+      'y' in product.defaultImageCrop &&
+      'width' in product.defaultImageCrop &&
+      'height' in product.defaultImageCrop
+    ) {
+      const crop = product.defaultImageCrop as {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      };
+      defaultImageCrop = crop;
+    }
+    return {
+      ...product,
+      price: Number(product.price),
+      rating: Number(product.rating),
+      variants: product.variants.map((variant) => ({
+        ...variant,
+        price: variant.price ? Number(variant.price) : undefined,
+      })),
+      defaultImageCrop,
+    };
+  });
 }
 
 export async function getProductBySlug(slug: string) {
@@ -84,7 +105,12 @@ export async function getProductBySlug(slug: string) {
       product.defaultImageCrop &&
       typeof product.defaultImageCrop === 'object'
     ) {
-      const crop = product.defaultImageCrop as { x: number; y: number; width: number; height: number };
+      const crop = product.defaultImageCrop as {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      };
       if (
         typeof crop.x === 'number' &&
         typeof crop.y === 'number' &&

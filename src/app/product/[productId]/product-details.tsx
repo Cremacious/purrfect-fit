@@ -7,10 +7,8 @@ import AddToCartButton from '@/components/add-to-cart-button';
 import { Minus, Plus } from 'lucide-react';
 
 export default function ProductDetails({ product }: { product: ProductType }) {
-  const originalWidth = 800;
-  const originalHeight = 800;
-  const displayWidth = 350;
-  const displayHeight = 400;
+  const displayWidth = 500;
+  const displayHeight = 450;
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -71,50 +69,56 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               Click an image to zoom in
             </div>
             <div
-              className="rounded-2xl overflow-hidden relative w-full flex justify-center items-center"
+              className="rounded-2xl overflow-hidden relative w-full flex justify-center items-center bg-purple-100 aspect-video"
               style={{
                 width: '100%',
                 maxWidth: displayWidth,
-                height: 'auto',
-                minHeight: displayHeight,
+                height: displayHeight,
               }}
             >
               <Image
                 src={product.images[mainImageIndex]}
                 alt="Product"
-                width={originalWidth}
-                height={originalHeight}
-                style={{
-                  objectFit: 'cover',
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                }}
-                className="object-cover w-full h-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+                fill
+                style={{ objectFit: 'cover' }}
+                className="object-cover w-full h-full rounded-2xl"
                 priority
               />
             </div>
-            <div className="bg-white shadow-md p-4 w-full max-w-full overflow-auto rounded-2xl border">
-              <div className="flex justify-between flex-row gap-4 shrink-0">
-                <div className="flex justify-between flex-row gap-4 shrink-0">
-                  {product.images.map((image, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => setMainImageIndex(index)}
-                      className={`focus:outline-none ${
-                        index === mainImageIndex ? 'ring-2 ring-purple-500' : ''
-                      }`}
-                    >
-                      <Image
-                        src={image}
-                        alt={`Product ${index + 1}`}
-                        width={64}
-                        height={64}
-                        className="w-16 h-16 rounded-md aspect-square object-cover object-top cursor-pointer shadow-lg"
-                      />
-                    </button>
-                  ))}
-                </div>
+            <div className="bg-white shadow-md p-2 w-full max-w-full overflow-auto rounded-2xl border">
+              <div className="flex flex-row gap-4 shrink-0">
+                {(() => {
+                  const defaultIdx = product.defaultImageIndex ?? 0;
+                  const reordered = [
+                    product.images[defaultIdx],
+                    ...product.images.filter((_, idx) => idx !== defaultIdx),
+                  ];
+                  return reordered.map((image) => {
+                    const originalIndex = product.images.findIndex(
+                      (img) => img === image
+                    );
+                    return (
+                      <button
+                        key={originalIndex}
+                        type="button"
+                        onClick={() => setMainImageIndex(originalIndex)}
+                        className={`focus:outline-none ${
+                          originalIndex === mainImageIndex
+                            ? 'border-2 border-purple-500 rounded-lg p-[2px]'
+                            : ''
+                        }`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`Product ${originalIndex + 1}`}
+                          width={64}
+                          height={64}
+                          className="w-16 h-16  aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
+                        />
+                      </button>
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>

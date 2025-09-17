@@ -26,23 +26,13 @@ import Image from 'next/image';
 import { productSchema } from '@/lib/validators/product.validator';
 import { createProduct } from '@/lib/actions/product.actions';
 import { toast } from 'sonner';
-import Cropper, { Area } from 'react-easy-crop';
+
 
 export default function AddProductForm() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [defaultImageIndex, setDefaultImageIndex] = useState(0);
-  const [defaultImageCrop, setDefaultImageCrop] = useState<
-    | {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-      }
-    | undefined
-  >(undefined);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+
   const [hasVariants, setHasVariants] = useState(false);
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -126,14 +116,7 @@ export default function AddProductForm() {
     setImagePreviews(compressedPreviews);
   }
 
-  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    setDefaultImageCrop({
-      x: croppedAreaPixels.x,
-      y: croppedAreaPixels.y,
-      width: croppedAreaPixels.width,
-      height: croppedAreaPixels.height,
-    });
-  };
+ 
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
@@ -147,7 +130,6 @@ export default function AddProductForm() {
         ...values,
         images,
         defaultImageIndex,
-        defaultImageCrop,
       });
       if (response.success) {
         toast.success(response.message);
@@ -155,7 +137,6 @@ export default function AddProductForm() {
         setImageFiles([]);
         setImagePreviews([]);
         setDefaultImageIndex(0);
-        setDefaultImageCrop(undefined);
       } else {
         toast.error(response.message);
       }
@@ -210,38 +191,13 @@ export default function AddProductForm() {
             className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200 transition"
             onChange={onImagesChange}
           />
-          {/* Cropping UI for default image (pseudo-code, replace with react-easy-crop or similar) */}
+      
           {imagePreviews[defaultImageIndex] && (
             <div className="mt-4">
               <span className="block text-xs text-gray-500 mb-2">
                 Crop Default Image
               </span>
-              {imagePreviews[defaultImageIndex] && (
-                <div className="mt-4 w-[300px] h-[300px] relative">
-                  <Cropper
-                    image={imagePreviews[defaultImageIndex]}
-                    crop={crop}
-                    zoom={zoom}
-                    aspect={1}
-                    onCropChange={setCrop}
-                    onZoomChange={setZoom}
-                    onCropComplete={onCropComplete}
-                    cropShape="rect"
-                    showGrid={false}
-                  />
-                  <div className="flex gap-2 mt-2">
-                    <label className="text-xs">Zoom</label>
-                    <input
-                      type="range"
-                      min={1}
-                      max={3}
-                      step={0.01}
-                      value={zoom}
-                      onChange={(e) => setZoom(Number(e.target.value))}
-                    />
-                  </div>
-                </div>
-              )}
+          
             </div>
           )}
         </div>
