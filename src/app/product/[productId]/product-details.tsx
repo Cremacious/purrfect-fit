@@ -13,9 +13,9 @@ export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [mainImageIndex, setMainImageIndex] = useState(
-    product.defaultImageIndex ?? 0
-  );
+  const [mainImageIndex] = useState(product.defaultImageIndex ?? 0);
+  const [showCarousel, setShowCarousel] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   const hasVariants =
     Array.isArray(product.variants) && product.variants.length > 0;
@@ -61,6 +61,16 @@ export default function ProductDetails({ product }: { product: ProductType }) {
     );
   };
 
+  const openCarousel = (idx: number) => {
+    setCarouselIndex(idx);
+    setShowCarousel(true);
+  };
+  const closeCarousel = () => setShowCarousel(false);
+  const prevImage = () =>
+    setCarouselIndex((i) => (i === 0 ? product.images.length - 1 : i - 1));
+  const nextImage = () =>
+    setCarouselIndex((i) => (i === product.images.length - 1 ? 0 : i + 1));
+
   return (
     <div className="p-2 md:p-4 md:mt-8">
       <div className="lg:max-w-6xl max-w-xl mx-auto">
@@ -76,13 +86,14 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 maxWidth: displayWidth,
                 height: displayHeight,
               }}
+              onClick={() => openCarousel(mainImageIndex)}
             >
               <Image
                 src={product.images[mainImageIndex]}
                 alt="Product"
                 fill
                 style={{ objectFit: 'cover' }}
-                className="object-cover w-full h-full rounded-2xl"
+                className="object-cover w-full h-full rounded-2xl cursor-zoom-in"
                 priority
               />
             </div>
@@ -102,7 +113,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                       <button
                         key={originalIndex}
                         type="button"
-                        onClick={() => setMainImageIndex(originalIndex)}
+                        onClick={() => openCarousel(originalIndex)}
                         className={`focus:outline-none ${
                           originalIndex === mainImageIndex
                             ? 'border-2 border-purple-500 rounded-lg p-[2px]'
@@ -114,7 +125,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                           alt={`Product ${originalIndex + 1}`}
                           width={64}
                           height={64}
-                          className="w-16 h-16  aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
+                          className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
                         />
                       </button>
                     );
@@ -214,11 +225,6 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               {/* Variant */}
               {product.variants !== null && product.variants.length > 0 && (
                 <div>
-                  {/* <div className="mt-2 text-sm text-gray-700">
-                    {selectedVariant
-                      ? `Stock: ${selectedVariant.stock}`
-                      : 'Select options to view stock'}
-                  </div> */}
                   <div className="text-sm text-gray-500 mb-2 ml-1">
                     Please select a {product.optionALabel}
                     {product.variants.length > 1
@@ -341,6 +347,48 @@ export default function ProductDetails({ product }: { product: ProductType }) {
           </div>
         </div>
       </div>
+
+      {showCarousel && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="relative bg-purple-100 rounded-lg p-2 mx-2 md:mx-4 max-w-4xl w-full flex flex-col items-center">
+            <div
+              className="relative w-full flex justify-center items-center"
+              style={{ height: '100%', minHeight: 300, maxHeight: 700 }}
+            >
+              <button
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
+                onClick={prevImage}
+                aria-label="Previous image"
+              >
+                <span className="text-2xl">&#8592;</span>
+              </button>
+              <div className="w-full flex justify-center items-center">
+                <Image
+                  src={product.images[carouselIndex]}
+                  alt={`Product ${carouselIndex + 1}`}
+                  width={400}
+                  height={300}
+                  className="w-full h-full rounded-lg object-contain md:w-[800px] md:h-[600px]"
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+              <button
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
+                onClick={nextImage}
+                aria-label="Next image"
+              >
+                <span className="text-2xl">&#8594;</span>
+              </button>
+              <button
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white  shadow-md px-6 py-2 rounded-lg"
+                onClick={closeCarousel}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
