@@ -1,14 +1,12 @@
 import ProductsView from './products-view';
 import { getProducts } from '@/lib/actions/product.actions';
 
-interface ProductsPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
 export default async function ProductsPage({
   searchParams,
-}: ProductsPageProps) {
-  const params = searchParams;
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const params = searchParams || {};
   const animal = params.animal as string;
   const category = params.category as string;
   const brand = params.brand as string;
