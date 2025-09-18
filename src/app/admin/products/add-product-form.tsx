@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -49,6 +49,7 @@ export default function AddProductForm() {
 
   const defaultPrice = watch('price') ?? 0;
   const nameValue = watch('name');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (hasVariants && fields.length === 0) {
@@ -85,7 +86,6 @@ export default function AddProductForm() {
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-          // Resize logic
           if (width > maxWidth) {
             height = Math.round((maxWidth / width) * height);
             width = maxWidth;
@@ -121,15 +121,33 @@ export default function AddProductForm() {
 
   async function onImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
-    setImageFiles(files);
+    if (files.length === 0) return;
     const compressedPreviews = await Promise.all(
       files.map((file) => compressAndResizeImage(file, 800, 800, 0.7))
     );
-    setImagePreviews(compressedPreviews);
+    setImageFiles((prev) => [...prev, ...files]);
+    setImagePreviews((prev) => {
+      const updated = [...prev, ...compressedPreviews];
+      form.setValue('images', updated); // keep form in sync
+      return updated;
+    });
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  function handleDeleteImage(idx: number) {
+    setImageFiles((prev) => prev.filter((_, i) => i !== idx));
+    setImagePreviews((prev) => {
+      const updated = prev.filter((_, i) => i !== idx);
+      form.setValue('images', updated); // keep form in sync
+      return updated;
+    });
+    if (defaultImageIndex === idx) setDefaultImageIndex(0);
+    else if (defaultImageIndex > idx) setDefaultImageIndex((d) => d - 1);
   }
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     try {
+      console.log(values);
       if (imageFiles.some((file) => file.size > 12 * 1024 * 1024)) {
         toast.error('One or more images are too large (max 12MB each).');
         return;
@@ -174,18 +192,22 @@ export default function AddProductForm() {
         className="space-y-8 max-w-3xl mx-auto py-10 bg-white rounded-xl shadow-lg p-8"
       >
         <div className="flex flex-col items-center gap-4">
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-4 flex-wrap">
             {imagePreviews.length > 0 ? (
               imagePreviews.map((src, idx) => (
-                <div key={idx} className="relative">
+                <div
+                  key={idx}
+                  className="relative w-44 h-44 flex items-center justify-center bg-gray-50 rounded-lg border"
+                >
                   <Image
                     src={src}
                     alt={`Product image ${idx + 1}`}
-                    className={`object-cover rounded-lg border ${
+                    width={180}
+                    height={180}
+                    style={{ objectFit: 'contain' }}
+                    className={`w-full h-full rounded-lg border ${
                       defaultImageIndex === idx ? 'ring-4 ring-purple-500' : ''
                     }`}
-                    width={120}
-                    height={120}
                   />
                   <Button
                     type="button"
@@ -196,20 +218,34 @@ export default function AddProductForm() {
                   >
                     {defaultImageIndex === idx ? 'Default' : 'Set Default'}
                   </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="destructive"
+                    className="absolute top-2 right-2"
+                    onClick={() => handleDeleteImage(idx)}
+                  >
+                    Delete
+                  </Button>
                 </div>
               ))
             ) : (
               <span className="text-yellow-800 text-5xl">📦</span>
             )}
           </div>
-          <FormLabel className="font-semibold text-gray-700">
-            Upload Images
-          </FormLabel>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-2"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Add Another Image
+          </Button>
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/*"
-            multiple
-            className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200 transition"
+            className="hidden"
             onChange={onImagesChange}
           />
 
