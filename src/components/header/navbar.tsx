@@ -8,9 +8,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { Heart, ChevronDown, ShoppingCart } from 'lucide-react';
-import { Button } from '../ui/button';
 import AuthButtons from './auth-buttons';
 import { useCartStore } from '@/stores/useCartStore';
+import MobileSidebar from './mobile-sidebar';
 
 export default function Navbar() {
   const cart = useCartStore((state) => state.cart);
@@ -66,7 +66,7 @@ export default function Navbar() {
 
             {/* Right - Actions */}
             <div className="flex items-center gap-x-6 gap-y-4 flex-shrink-0">
-              <div className="flex items-center sm:space-x-8 space-x-6">
+              <div className="flex items-center md:space-x-5 space-x-4">
                 <div className="flex flex-col items-center justify-center gap-0.5 cursor-pointer">
                   <div className="relative">
                     <Heart className="cursor-pointer text-white inline w-7 h-7" />
@@ -84,21 +84,9 @@ export default function Navbar() {
                   </Link>
                 </div>
                 <AuthButtons />
-                {/* Mobile button */}
-                <button id="toggleOpen" className="lg:hidden cursor-pointer">
-                  <svg
-                    className="w-7 h-7"
-                    fill="#333"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
+                <div className=" md:hidden">
+                  <MobileSidebar />
+                </div>
               </div>
             </div>
           </div>

@@ -22,7 +22,7 @@ export default function ProductsView({
         </Button>
       </div>
       <div
-        className={`w-full md:max-w-[300px] md:border-l-2 border shrink-0 shadow-md px-6 sm:px-8 min-h-screen py-6 ${
+        className={`w-full md:max-w-[300px] shrink-0  px-6 sm:px-8 min-h-screen py-6 ${
           filtersOpen ? 'block' : 'hidden'
         } md:block`}
       >
@@ -37,7 +37,7 @@ export default function ProductsView({
         </div>
         <div>
           <h6 className="text-slate-900 text-sm font-semibold">Brand</h6>
-          <div className="flex px-3 py-1.5 rounded-md border border-gray-300 bg-gray-100 overflow-hidden mt-2">
+          <div className="flex px-3 py-1.5 rounded-md bg-gray-100 overflow-hidden mt-2">
             <input
               type="email"
               placeholder="Search brand"

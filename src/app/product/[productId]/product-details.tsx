@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export default function ProductDetails({ product }: { product: ProductType }) {
   const displayWidth = 500;
-  const displayHeight = 450;
+  const displayHeight = 500;
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -75,62 +75,64 @@ export default function ProductDetails({ product }: { product: ProductType }) {
     <div className="p-2 md:p-4 md:mt-8">
       <div className="lg:max-w-6xl max-w-xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
-          <div className="w-full lg:sticky top-0 flex flex-col items-center gap-4 bg-purple-100 shadow-md pb-4 p-2 rounded-2xl ">
-            <div className="text-center w-full font-medium text-gray-600">
-              Click an image to zoom in
-            </div>
-            <div
-              className="rounded-2xl overflow-hidden relative w-full flex justify-center items-center bg-purple-100 aspect-video"
-              style={{
-                width: '100%',
-                maxWidth: displayWidth,
-                height: displayHeight,
-              }}
-              onClick={() => openCarousel(mainImageIndex)}
-            >
-              <Image
-                src={product.images[mainImageIndex]}
-                alt="Product"
-                fill
-                style={{ objectFit: 'cover' }}
-                className="object-cover w-full h-full rounded-2xl cursor-zoom-in"
-                priority
-              />
-            </div>
-            <div className="bg-white shadow-md p-2 w-full max-w-full overflow-auto rounded-2xl border">
-              <div className="flex flex-row gap-4 shrink-0">
-                {(() => {
-                  const defaultIdx = product.defaultImageIndex ?? 0;
-                  const reordered = [
-                    product.images[defaultIdx],
-                    ...product.images.filter((_, idx) => idx !== defaultIdx),
-                  ];
-                  return reordered.map((image) => {
-                    const originalIndex = product.images.findIndex(
-                      (img) => img === image
-                    );
-                    return (
-                      <button
-                        key={originalIndex}
-                        type="button"
-                        onClick={() => openCarousel(originalIndex)}
-                        className={`focus:outline-none ${
-                          originalIndex === mainImageIndex
-                            ? 'border-2 border-purple-500 rounded-lg p-[2px]'
-                            : ''
-                        }`}
-                      >
-                        <Image
-                          src={image}
-                          alt={`Product ${originalIndex + 1}`}
-                          width={64}
-                          height={64}
-                          className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
-                        />
-                      </button>
-                    );
-                  });
-                })()}
+          <div>
+            <div className="w-full flex flex-col items-center gap-4 bg-purple-100 shadow-md py-4 p-2 rounded-2xl ">
+              <div
+                className="rounded-2xl overflow-hidden relative w-full flex justify-center items-center bg-purple-100 aspect-video"
+                style={{
+                  width: '100%',
+                  maxWidth: displayWidth,
+                  height: displayHeight,
+                }}
+                onClick={() => openCarousel(mainImageIndex)}
+              >
+                <Image
+                  src={product.images[mainImageIndex]}
+                  alt="Product"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  className="object-cover w-full h-full rounded-2xl cursor-zoom-in"
+                  priority
+                />
+              </div>
+              <div className="text-center text-sm w-full font-medium text-slate-800">
+                Click an image to enlarge
+              </div>
+              <div className="bg-white shadow-md p-2 w-full max-w-full overflow-auto rounded-2xl border">
+                <div className="flex flex-row gap-4 shrink-0">
+                  {(() => {
+                    const defaultIdx = product.defaultImageIndex ?? 0;
+                    const reordered = [
+                      product.images[defaultIdx],
+                      ...product.images.filter((_, idx) => idx !== defaultIdx),
+                    ];
+                    return reordered.map((image) => {
+                      const originalIndex = product.images.findIndex(
+                        (img) => img === image
+                      );
+                      return (
+                        <button
+                          key={originalIndex}
+                          type="button"
+                          onClick={() => openCarousel(originalIndex)}
+                          className={`focus:outline-none ${
+                            originalIndex === mainImageIndex
+                              ? 'border-2 border-purple-500 rounded-lg p-[2px]'
+                              : ''
+                          }`}
+                        >
+                          <Image
+                            src={image}
+                            alt={`Product ${originalIndex + 1}`}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
+                          />
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
               </div>
             </div>
           </div>

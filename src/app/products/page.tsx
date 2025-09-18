@@ -5,7 +5,9 @@ interface ProductsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+export default async function ProductsPage({
+  searchParams,
+}: ProductsPageProps) {
   const params = await searchParams;
   const animal = params.animal as string;
   const category = params.category as string;
@@ -27,16 +29,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           No products available at the moment. Please check back later.
         </div>
       )}
-      <div className="p-8 text-center text-gray-500">
-        {products.map((product) => (
-          <div key={product.id}>
-            <h2 className="text-lg font-semibold">{product.name}</h2>
-            <p className="text-sm">Category: {product.category}</p>
-            <p className="text-sm">Animal: {product.animal}</p>
-            <p className="text-sm">Price: ${product.price.toFixed(2)}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
