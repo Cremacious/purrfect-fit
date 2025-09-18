@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ProductType } from '@/lib/types/product.type';
 import AddToCartButton from '@/components/add-to-cart-button';
 import { Minus, Plus } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ProductDetails({ product }: { product: ProductType }) {
   const displayWidth = 500;
@@ -64,7 +65,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
     <div className="p-2 md:p-4 md:mt-8">
       <div className="lg:max-w-6xl max-w-xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
-          <div className="w-full lg:sticky top-0 flex flex-col items-center gap-4 bg-purple-100 shadow-sm pb-4 p-2 rounded-2xl border">
+          <div className="w-full lg:sticky top-0 flex flex-col items-center gap-4 bg-purple-100 shadow-md pb-4 p-2 rounded-2xl ">
             <div className="text-center w-full font-medium text-gray-600">
               Click an image to zoom in
             </div>
@@ -123,13 +124,25 @@ export default function ProductDetails({ product }: { product: ProductType }) {
             </div>
           </div>
 
-          <div className="w-full lg:pl-8 flex flex-col  bg-white shadow-sm p-2 rounded-2xl border">
+          <div className="w-full p-4 md:p-8 flex flex-col bg-white shadow-md border-gray-100 border-t-1 rounded-2xl ">
             <div className="space-y-4">
-              <div>Brand:</div>
-              <div>{product.brand}</div>
-              <div className="text-2xl sm:text-xl font-semibold text-slate-800">
-                {product.name}
+              <div>
+                <div className="flex items-center gap-1 font-bold">
+                  <Link
+                    className="text-purple-600 hover:underline"
+                    href={`/brand/${product.brand}`}
+                  >
+                    {product.brand}
+                  </Link>
+                </div>
+                <h1 className="hidden md:block text-3xl font-bold text-slate-800 ">
+                  {product.name}
+                </h1>
+                <h1 className=" md:hidden text-2xl font-bold text-slate-800 ">
+                  {product.name}
+                </h1>
               </div>
+
               <div className="flex items-center gap-3 ">
                 <div className="flex items-center gap-1">
                   <p className="text-base text-slate-800">4</p>
@@ -179,51 +192,52 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 <span className="text-slate-800">|</span>
                 <p className="text-sm text-slate-800">50 Reviews</p>
               </div>
-              <div className="mt-4">
-                <p className="text-sm text-slate-500">Description:</p>
-                <p className="text-slate-800 mt-1 text-sm">
-                  {product.description}
-                </p>
-              </div>
               <div className="flex items-center flex-wrap gap-2 ">
                 <h4 className="text-purple-800 text-2xl sm:text-3xl font-semibold">
                   {optionAChoice &&
                   optionBChoice &&
                   selectedVariantPrice !== undefined &&
                   !isNaN(selectedVariantPrice) ? (
-                    <>
-                      ${selectedVariantPrice.toFixed(2)}{' '}
-                      <span className="text-xs text-gray-500">
-                        (variant price)
-                      </span>
-                    </>
+                    <>${selectedVariantPrice.toFixed(2)} </>
                   ) : (
-                    <>
-                      ${product.price.toFixed(2)}{' '}
-                      <span className="text-xs text-gray-500">
-                        (default price)
-                      </span>
-                    </>
+                    <>${product.price.toFixed(2)} </>
                   )}
                 </h4>
               </div>
+              <div className="mt-4">
+                <p className="text-sm text-slate-600">Description:</p>
+                <p className="text-slate-800 mt-1 text-sm">
+                  {product.description}
+                </p>
+              </div>
+
               {/* Variant */}
               {product.variants !== null && product.variants.length > 0 && (
                 <div>
-                  <div className="mt-2 text-sm text-gray-700">
+                  {/* <div className="mt-2 text-sm text-gray-700">
                     {selectedVariant
                       ? `Stock: ${selectedVariant.stock}`
                       : 'Select options to view stock'}
+                  </div> */}
+                  <div className="text-sm text-gray-500 mb-2 ml-1">
+                    Please select a {product.optionALabel}
+                    {product.variants.length > 1
+                      ? ` and ${product.optionBLabel}`
+                      : ''}
                   </div>
                   <div>
                     {product.variants !== null &&
                       product.variants !== undefined && (
                         <div className="text-sm text-slate-500 ml-1 mb-1">
-                          {product.optionALabel}:
+                          {product.optionALabel
+                            ? product.optionALabel.charAt(0).toUpperCase() +
+                              product.optionALabel.slice(1)
+                            : ''}
+                          :
                         </div>
                       )}
 
-                    <div className="flex flex-row gap-1 flex-wrap">
+                    <div className="flex flex-row gap-1 flex-wrap mb-4">
                       {optionAList.map((optionA) => (
                         <Button
                           key={optionA}
@@ -244,7 +258,9 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                               : ''
                           }`}
                         >
-                          {optionA}
+                          {optionA
+                            ? optionA.charAt(0).toUpperCase() + optionA.slice(1)
+                            : ''}
                         </Button>
                       ))}
                     </div>
@@ -253,7 +269,11 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                     {product.variants !== null &&
                       product.variants !== undefined && (
                         <div className="text-sm text-slate-500 ml-1 mb-1">
-                          {product.optionBLabel}:
+                          {product.optionBLabel
+                            ? product.optionBLabel.charAt(0).toUpperCase() +
+                              product.optionBLabel.slice(1)
+                            : ''}
+                          :
                         </div>
                       )}
                     <div className="flex flex-row gap-1 flex-wrap">
@@ -277,7 +297,9 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                               : ''
                           }`}
                         >
-                          {optionB}
+                          {optionB
+                            ? optionB.charAt(0).toUpperCase() + optionB.slice(1)
+                            : ''}
                         </Button>
                       ))}
                     </div>
@@ -285,7 +307,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 </div>
               )}
 
-              <div className="mt-4 md:mt-8 grid md:grid-cols-2 grid-cols-1 gap-2">
+              <div className="mt-4 md:mt-8 grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-1">
                 <div className="flex gap-4 items-center border border-gray-200 py-1 px-2 rounded-md w-max">
                   <Button
                     size={'sm'}

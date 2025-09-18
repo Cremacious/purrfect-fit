@@ -115,15 +115,15 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
       data: {
         name: parsedData.name,
         slug: parsedData.slug,
-        animal: parsedData.animal,
+        animal: parsedData.animal.toLocaleLowerCase(),
         category: parsedData.category,
         brand: parsedData.brand,
         description: parsedData.description,
         price: new Prisma.Decimal(parsedData.price ?? 0),
         stock: parsedData.stock ?? 0,
         images,
-        optionALabel: parsedData.optionALabel,
-        optionBLabel: parsedData.optionBLabel,
+        optionALabel: (parsedData.optionALabel ?? '').toLocaleLowerCase(),
+        optionBLabel: (parsedData.optionBLabel ?? '').toLocaleLowerCase(),
       },
     });
 
@@ -131,8 +131,8 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
       await prisma.productVariant.createMany({
         data: parsedData.variants.map((variant) => ({
           productId: product.id,
-          optionA: variant.optionA,
-          optionB: variant.optionB,
+          optionA: (variant.optionA ?? '').toLocaleLowerCase(),
+          optionB: (variant.optionB ?? '').toLocaleLowerCase(),
           price: new Prisma.Decimal(variant.price ?? parsedData.price),
           stock: variant.stock,
           images: [],
