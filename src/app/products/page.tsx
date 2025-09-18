@@ -1,7 +1,7 @@
 import ProductsView from './products-view';
 import { getProducts } from '@/lib/actions/product.actions';
 
-export default async function ProductsPage({
+export default async function Page({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
