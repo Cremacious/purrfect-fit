@@ -58,43 +58,17 @@ export async function getProducts(params?: GetProductsParams) {
     include: { variants: true },
   });
 
-  return products.map((product) => {
-    let defaultImageCrop:
-      | { x: number; y: number; width: number; height: number }
-      | undefined = undefined;
-    if (
-      product.defaultImageCrop &&
-      typeof product.defaultImageCrop === 'object' &&
-      'x' in product.defaultImageCrop &&
-      'y' in product.defaultImageCrop &&
-      'width' in product.defaultImageCrop &&
-      'height' in product.defaultImageCrop
-    ) {
-      const crop = product.defaultImageCrop as {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-      };
-      defaultImageCrop = crop;
-    }
-    return {
-      ...product,
-      price: Number(product.price),
-      rating: Number(product.rating),
-      variants: product.variants.map((variant) => ({
-        ...variant,
-        price: variant.price ? Number(variant.price) : undefined,
-      })),
-      defaultImageCrop,
-      optionALabel: product.optionALabel ?? '',
-      optionBLabel: product.optionBLabel ?? '',
-      defaultImageIndex:
-        typeof product.defaultImageIndex === 'number'
-          ? product.defaultImageIndex
-          : 0,
-    };
-  });
+  return products.map((product) => ({
+    ...product,
+    price: Number(product.price),
+    rating: Number(product.rating),
+    variants: product.variants.map((variant) => ({
+      ...variant,
+      price: variant.price ? Number(variant.price) : undefined,
+    })),
+    optionALabel: product.optionALabel ?? '',
+    optionBLabel: product.optionBLabel ?? '',
+  }));
 }
 
 export async function getProductBySlug(slug: string) {
@@ -104,33 +78,6 @@ export async function getProductBySlug(slug: string) {
       include: { reviews: true, variants: true },
     });
     if (!product) throw new Error('Product not found');
-    let defaultImageCrop:
-      | { x: number; y: number; width: number; height: number }
-      | undefined = undefined;
-    if (
-      product.defaultImageCrop &&
-      typeof product.defaultImageCrop === 'object'
-    ) {
-      const crop = product.defaultImageCrop as {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-      };
-      if (
-        typeof crop.x === 'number' &&
-        typeof crop.y === 'number' &&
-        typeof crop.width === 'number' &&
-        typeof crop.height === 'number'
-      ) {
-        defaultImageCrop = {
-          x: crop.x,
-          y: crop.y,
-          width: crop.width,
-          height: crop.height,
-        };
-      }
-    }
     return {
       ...product,
       price: Number(product.price),
@@ -139,13 +86,8 @@ export async function getProductBySlug(slug: string) {
         ...variant,
         price: variant.price ? Number(variant.price) : undefined,
       })),
-      defaultImageCrop,
       optionALabel: product.optionALabel ?? '',
       optionBLabel: product.optionBLabel ?? '',
-      defaultImageIndex:
-        typeof product.defaultImageIndex === 'number'
-          ? product.defaultImageIndex
-          : 0,
     };
   } catch (error) {
     console.error('Error fetching product by slug with reviews:', error);
@@ -169,8 +111,6 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
       ? [parsedData.coverImageBase64]
       : [];
 
-    const defaultImageCrop = parsedData.defaultImageCrop ?? Prisma.JsonNull;
-
     const product = await prisma.product.create({
       data: {
         name: parsedData.name,
@@ -182,11 +122,6 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
         price: new Prisma.Decimal(parsedData.price ?? 0),
         stock: parsedData.stock ?? 0,
         images,
-        defaultImageIndex:
-          typeof parsedData.defaultImageIndex === 'number'
-            ? parsedData.defaultImageIndex
-            : 0,
-        defaultImageCrop,
         optionALabel: parsedData.optionALabel,
         optionBLabel: parsedData.optionBLabel,
       },

@@ -48,6 +48,7 @@ export default function AddProductForm() {
   });
 
   const defaultPrice = watch('price') ?? 0;
+  const nameValue = watch('name');
 
   useEffect(() => {
     if (hasVariants && fields.length === 0) {
@@ -57,6 +58,18 @@ export default function AddProductForm() {
       fields.forEach((_, idx) => remove(idx));
     }
   }, [hasVariants, defaultPrice, append, fields, remove]);
+
+  useEffect(() => {
+    if (nameValue !== undefined) {
+      const slug = nameValue
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+      form.setValue('slug', slug);
+    }
+  }, [nameValue, form]);
 
   async function compressAndResizeImage(
     file: File,
@@ -121,7 +134,7 @@ export default function AddProductForm() {
         toast.error('One or more images are too large (max 12MB each).');
         return;
       }
-      // Move selected default image to index 0
+
       const images = [...imagePreviews];
       if (
         typeof defaultImageIndex === 'number' &&
@@ -355,26 +368,6 @@ export default function AddProductForm() {
 
         {!hasVariants ? (
           <div className="grid grid-cols-2 gap-6">
-            {/* <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Default Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      value={field.value ?? ''}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      placeholder="Default Price"
-                      type="number"
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="stock"
