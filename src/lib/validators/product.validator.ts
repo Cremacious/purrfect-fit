@@ -19,12 +19,12 @@ export const productSchema = z
       })
       .optional(),
     optionALabel: z.string().min(1).optional(),
-    optionBLabel: z.string().min(1).optional(),
+    optionBLabel: z.string().optional(), 
     variants: z
       .array(
         z.object({
-          optionA: z.string().optional(),
-          optionB: z.string().optional(),
+          optionA: z.string().min(1), 
+          optionB: z.string().optional(), 
           price: z.number(),
           stock: z.number(),
           images: z.array(z.string()).optional(),
@@ -37,15 +37,15 @@ export const productSchema = z
   })
   .refine(
     (data) => {
-      // If variants exist, optionALabel and optionBLabel must be present
+      
       if (data.variants && data.variants.length > 0) {
-        return !!data.optionALabel && !!data.optionBLabel;
+        return !!data.optionALabel;
       }
-      // If no variants, price and stock must be present
+
       return typeof data.price === 'number' && typeof data.stock === 'number';
     },
     {
       message:
-        'If variants exist, option labels are required. If not, price and stock are required.',
+        'If variants exist, optionALabel is required. If not, price and stock are required.',
     }
   );

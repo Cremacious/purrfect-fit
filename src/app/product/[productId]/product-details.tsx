@@ -227,9 +227,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 <div>
                   <div className="text-sm text-gray-500 mb-2 ml-1">
                     Please select a {product.optionALabel}
-                    {product.variants.length > 1
-                      ? ` and ${product.optionBLabel}`
-                      : ''}
+                    {product.optionBLabel ? ` and ${product.optionBLabel}` : ''}
                   </div>
                   <div>
                     {product.variants !== null &&
@@ -271,45 +269,45 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                       ))}
                     </div>
                   </div>
-                  <div>
-                    {product.variants !== null &&
-                      product.variants !== undefined && (
-                        <div className="text-sm text-slate-500 ml-1 mb-1">
-                          {product.optionBLabel
-                            ? product.optionBLabel.charAt(0).toUpperCase() +
-                              product.optionBLabel.slice(1)
-                            : ''}
-                          :
-                        </div>
-                      )}
-                    <div className="flex flex-row gap-1 flex-wrap">
-                      {optionBList.map((optionB) => (
-                        <Button
-                          key={optionB}
-                          variant="outline"
-                          onClick={() =>
-                            setOptionBChoice(
-                              optionBChoice === optionB ? '' : optionB
-                            )
-                          }
-                          disabled={!isOptionBEnabled(optionB)}
-                          className={`${
-                            optionBChoice === optionB
-                              ? 'bg-purple-600 text-white'
-                              : ''
-                          } ${
-                            !isOptionBEnabled(optionB)
-                              ? 'opacity-50 cursor-not-allowed'
-                              : ''
-                          }`}
-                        >
-                          {optionB
-                            ? optionB.charAt(0).toUpperCase() + optionB.slice(1)
-                            : ''}
-                        </Button>
-                      ))}
+                  {product.optionBLabel && (
+                    <div>
+                      <div className="text-sm text-slate-500 ml-1 mb-1">
+                        {product.optionBLabel
+                          ? product.optionBLabel.charAt(0).toUpperCase() +
+                            product.optionBLabel.slice(1)
+                          : ''}
+                        :
+                      </div>
+                      <div className="flex flex-row gap-1 flex-wrap">
+                        {optionBList.map((optionB) => (
+                          <Button
+                            key={optionB}
+                            variant="outline"
+                            onClick={() =>
+                              setOptionBChoice(
+                                optionBChoice === optionB ? '' : optionB
+                              )
+                            }
+                            disabled={!isOptionBEnabled(optionB)}
+                            className={`${
+                              optionBChoice === optionB
+                                ? 'bg-purple-600 text-white'
+                                : ''
+                            } ${
+                              !isOptionBEnabled(optionB)
+                                ? 'opacity-50 cursor-not-allowed'
+                                : ''
+                            }`}
+                          >
+                            {optionB
+                              ? optionB.charAt(0).toUpperCase() +
+                                optionB.slice(1)
+                              : ''}
+                          </Button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
 

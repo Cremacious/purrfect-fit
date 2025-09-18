@@ -446,7 +446,7 @@ export default function AddProductForm() {
                 name="optionBLabel"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Option B Label</FormLabel>
+                    <FormLabel>Option B Label (optional)</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. Color" type="text" {...field} />
                     </FormControl>
@@ -467,7 +467,7 @@ export default function AddProductForm() {
                   />
                   <Input
                     {...form.register(`variants.${idx}.optionB`)}
-                    placeholder={watch('optionBLabel') || 'Option B'}
+                    placeholder={watch('optionBLabel') || 'Option B (optional)'}
                   />
                   <Input
                     {...form.register(`variants.${idx}.price`, {
