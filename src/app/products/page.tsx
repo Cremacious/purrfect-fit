@@ -1,12 +1,12 @@
 import ProductsView from './products-view';
 import { getProducts } from '@/lib/actions/product.actions';
 
-export default async function Page({
+export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const params = searchParams || {};
+  const params = await searchParams;
   const animal = params.animal as string;
   const category = params.category as string;
   const brand = params.brand as string;
