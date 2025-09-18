@@ -8,7 +8,7 @@ interface ProductsPageProps {
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
-  const params = await searchParams;
+  const params = searchParams;
   const animal = params.animal as string;
   const category = params.category as string;
   const brand = params.brand as string;
