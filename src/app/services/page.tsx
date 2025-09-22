@@ -1,3 +1,6 @@
+import Image from 'next/image';
+import turtleImage from '@/assets/service-images/turtles.png';
+
 export default function ServicesPage() {
   return (
     <div className="flex flex-col bg-white max-w-7xl mx-auto my-4 rounded-2xl shadow-lg min-h-screen">
@@ -18,8 +21,8 @@ export default function ServicesPage() {
           <div className="grid lg:grid-cols-2 items-center lg:gap-y-6 bg-purple-600">
             <div className="max-lg:order-1 max-lg:text-center sm:p-12 p-8 ">
               <div className="">
-                <h2 className="text-white lilita drop-shadow-2xl text-center lg:text-5xl text-3xl font-bold !leading-tight">
-                  Animal Protection Service
+                <h2 className="text-white lilita drop-shadow-2xl text-center md:text-4xl text-3xl font-bold !leading-tight">
+                  Sea Turtle Protection Program
                 </h2>
                 <p className="text-white mt-6 text-base font-bold leading-relaxed">
                   Lorem ipsum dolor sit amet consectetur adipiscing elit.
@@ -38,8 +41,8 @@ export default function ServicesPage() {
               </div>
             </div>
             <div className="lg:h-[480px] h-full flex items-center">
-              <img
-                src="https://readymadeui.com/team-image.webp"
+              <Image
+                src={turtleImage}
                 className="w-full h-full object-cover"
                 alt="Dining Experience"
               />
