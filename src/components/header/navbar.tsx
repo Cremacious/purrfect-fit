@@ -28,9 +28,9 @@ export default function Navbar() {
                   <h1 className="lilita text-4xl text-white drop-shadow-lg">
                     Purrfect Fit
                   </h1>
-                  <p className="text-white lilita  -mt-1 drop-shadow-lg text-center">
+                  {/* <p className="text-white lilita  -mt-1 drop-shadow-lg text-center">
                     Everyday Pets & Clothes
-                  </p>
+                  </p> */}
                 </div>
               </Link>
               <Link href="javascript:void(0)" className="hidden max-sm:block">
@@ -136,23 +136,23 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
           <Link
-            href={'/products'}
+            href={'/services'}
             className="text-xl lilita text-white drop-shadow-lg"
           >
             Services
           </Link>
           <Link
-            href={'/products'}
+            href={'/about'}
             className="text-xl lilita text-white drop-shadow-lg"
           >
             About
           </Link>
-          <Link
-            href={'/products'}
+          {/* <Link
+            href={'/contact'}
             className="text-xl lilita text-white drop-shadow-lg"
           >
             Contact
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@ export default function Home() {
         <h2 className="text-slate-800 xl:text-4xl md:text-3xl text-2xl font-bold !leading-tight">
           Explore Our Products
         </h2>
-        <div className="bg-purple-300 p-2">
+        <div className="max-w-7xl mx-auto p-2">
           <ProductRow />
         </div>
       </div>
