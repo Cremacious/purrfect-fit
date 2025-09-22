@@ -16,13 +16,13 @@ export type ProductType = {
   isFeatured: boolean;
   createdAt: Date;
   variants: ProductVariant[];
-  defaultImageIndex?: number;
-  defaultImageCrop?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
+  // defaultImageIndex?: number;
+  // defaultImageCrop?: {
+  //   x: number;
+  //   y: number;
+  //   width: number;
+  //   height: number;
+  // };
 };
 
 export type ProductVariant = {

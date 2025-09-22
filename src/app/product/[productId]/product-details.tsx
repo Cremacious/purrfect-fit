@@ -13,7 +13,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
   const [optionAChoice, setOptionAChoice] = useState('');
   const [optionBChoice, setOptionBChoice] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [mainImageIndex] = useState(product.defaultImageIndex ?? 0);
+  const [mainImageIndex] = useState(0);
   const [showCarousel, setShowCarousel] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -101,7 +101,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               <div className="bg-white shadow-md p-2 w-full max-w-full overflow-auto rounded-2xl border">
                 <div className="flex flex-row gap-4 shrink-0">
                   {(() => {
-                    const defaultIdx = product.defaultImageIndex ?? 0;
+                    const defaultIdx = 0;
                     const reordered = [
                       product.images[defaultIdx],
                       ...product.images.filter((_, idx) => idx !== defaultIdx),

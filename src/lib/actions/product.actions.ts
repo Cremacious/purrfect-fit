@@ -68,7 +68,7 @@ export async function getProducts(params?: GetProductsParams) {
     })),
     optionALabel: product.optionALabel ?? '',
     optionBLabel: product.optionBLabel ?? '',
-    defaultImageCrop: undefined, // Legacy field, no longer used
+    defaultImageCrop: product.defaultImageCrop ?? undefined,
   }));
 }
 
@@ -89,7 +89,6 @@ export async function getProductBySlug(slug: string) {
       })),
       optionALabel: product.optionALabel ?? '',
       optionBLabel: product.optionBLabel ?? '',
-      defaultImageCrop: undefined, // Legacy field, no longer used
     };
   } catch (error) {
     console.error('Error fetching product by slug with reviews:', error);
