@@ -10,10 +10,22 @@ interface GetProductsParams {
   category?: string;
   brand?: string;
   search?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export async function getProducts(params?: GetProductsParams) {
   const whereClause: Prisma.ProductWhereInput = {};
+  if (
+    typeof params?.minPrice === 'number' &&
+    typeof params?.maxPrice === 'number'
+  ) {
+    whereClause.price = { gte: params.minPrice, lte: params.maxPrice };
+  } else if (typeof params?.minPrice === 'number') {
+    whereClause.price = { gte: params.minPrice };
+  } else if (typeof params?.maxPrice === 'number') {
+    whereClause.price = { lte: params.maxPrice };
+  }
 
   if (params?.animal) {
     whereClause.animal = {
@@ -146,5 +158,31 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
   } catch (error) {
     console.error('Error creating product:', error);
     return { success: false, message: 'Error creating product' };
+  }
+}
+
+export async function getAllBrands() {
+  try {
+    const brands = await prisma.product.findMany({
+      distinct: ['brand'],
+      select: { brand: true },
+    });
+    return brands.map((b) => b.brand).filter((b): b is string => !!b);
+  } catch (error) {
+    console.error('Error fetching brands:', error);
+    return [];
+  }
+}
+
+export async function getAllAnimals() {
+  try {
+    const animals = await prisma.product.findMany({
+      distinct: ['animal'],
+      select: { animal: true },
+    });
+    return animals.map((a) => a.animal).filter((a): a is string => !!a);
+  } catch (error) {
+    console.error('Error fetching animals:', error);
+    return [];
   }
 }
