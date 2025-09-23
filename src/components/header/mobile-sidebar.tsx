@@ -65,22 +65,16 @@ export default function MobileSidebar() {
             </Button>
 
             <Link
-              href="/products"
+              href="/services"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               Services
             </Link>
             <Link
-              href="/products"
+              href="/about"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               About
-            </Link>
-            <Link
-              href="/products"
-              className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
-            >
-              Contact
             </Link>
           </nav>
         </div>
