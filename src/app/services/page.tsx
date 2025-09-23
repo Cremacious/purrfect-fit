@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import turtleImage from '@/assets/service-images/turtles.png';
+import beaversImage from '@/assets/service-images/beavers.png';
+import peacocksImage from '@/assets/service-images/peacocks.png';
 
 export default function ServicesPage() {
   return (
@@ -21,26 +23,33 @@ export default function ServicesPage() {
           <div className="grid lg:grid-cols-2 items-center lg:gap-y-6 bg-purple-600">
             <div className="max-lg:order-1 max-lg:text-center sm:p-12 p-8 ">
               <div className="">
-                <h2 className="text-white lilita drop-shadow-2xl text-center md:text-4xl text-3xl font-bold !leading-tight">
+                <h2 className="text-white lilita drop-shadow-2xl text-center md:text-3xl text-2xl font-bold !leading-tight">
                   Sea Turtle Protection Program
                 </h2>
                 <p className="text-white mt-6 text-base font-bold leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit.
-                  Quisque faucibus ex sapien vitae pellentesque sem placerat. In
-                  id cursus mi pretium tellus duis convallis. Tempus leo eu
-                  aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus
-                  nec metus bibendum egestas. Iaculis massa nisl malesuada
-                  lacinia integer nunc posuere. Ut hendrerit semper vel class
-                  aptent taciti sociosqu. Ad litora torquent per conubia nostra
-                  inceptos himenaeos.
+                  Introducing our elite Turtle Security Guard Service—where
+                  safety meets expertise for your precious hatchlings. As sea
+                  turtles begin their life’s journey from nest to ocean, they
+                  face countless threats from predators, especially seagulls.
+                  Our highly trained bodyguards are dedicated to ensuring every
+                  turtle reaches the water unharmed. Equipped with advanced
+                  martial arts skills and weapon proficiency, our team stands
+                  vigilant against aerial and ground threats, providing a
+                  protective shield for your hatchlings. With years of
+                  experience in wildlife security and a passion for
+                  conservation, our guards combine physical prowess with
+                  strategic defense tactics, guaranteeing peace of mind for
+                  conservationists and nature lovers alike. Trust us to
+                  safeguard your turtles’ first steps—because every life
+                  deserves a fighting chance.
                 </p>
               </div>
-              <div className="text-white space-y-2 font-bold mt-4">
+              {/* <div className="text-white space-y-2 font-bold mt-4">
                 <p>Phone: (123) 456-7890</p>
                 <p>Email: contact@purrfectfit.com</p>
-              </div>
+              </div> */}
             </div>
-            <div className="lg:h-[480px] h-full flex items-center">
+            <div className="lg:h-[600px] h-full flex items-center">
               <Image
                 src={turtleImage}
                 className="w-full h-full object-cover"
@@ -48,7 +57,7 @@ export default function ServicesPage() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3  gap-6 px-4 my-4">
+          {/* <div className="grid grid-cols-2 md:grid-cols-3  gap-6 px-4 my-4">
             <div className="bg-purple-200 p-6 rounded-md flex flex-col justify-evenly">
               <h3 className="text-2xl text-center font-bold mb-2 text-slate-800">
                 Fact One
@@ -76,42 +85,50 @@ export default function ServicesPage() {
                 faucibus ex sapien vitae pellentesque sem placerat.
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="border-b-2 "></div>
         {/* Second */}
         <div>
           <div className="grid lg:grid-cols-2 items-center lg:gap-y-6 bg-purple-600">
-            <div className="lg:h-[480px] h-full flex items-center">
-              <img
-                src="https://readymadeui.com/team-image.webp"
+            <div className="lg:h-[600px] h-full flex items-center">
+              <Image
+                src={beaversImage}
                 className="w-full h-full object-cover"
                 alt="Dining Experience"
               />
             </div>
             <div className="max-lg:order-1 max-lg:text-center sm:p-12 p-8 ">
               <div className="">
-                <h2 className="text-white lilita drop-shadow-2xl text-center lg:text-5xl text-3xl font-bold !leading-tight">
-                  Animal Protection Service
+                <h2 className="text-white lilita drop-shadow-2xl text-center lg:text-3xl text-2xl font-bold !leading-tight">
+                  Beaver Architecture Classes
                 </h2>
                 <p className="text-white mt-6 text-base font-bold leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit.
-                  Quisque faucibus ex sapien vitae pellentesque sem placerat. In
-                  id cursus mi pretium tellus duis convallis. Tempus leo eu
-                  aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus
-                  nec metus bibendum egestas. Iaculis massa nisl malesuada
-                  lacinia integer nunc posuere. Ut hendrerit semper vel class
-                  aptent taciti sociosqu. Ad litora torquent per conubia nostra
-                  inceptos himenaeos.
+                  Unlock your beaver’s full potential with our exclusive Modern
+                  Architecture Classes, designed specifically for the
+                  industrious and eager beaver! Led by renowned architects and
+                  industry leaders, our program covers the latest trends in
+                  sustainable design, advanced dam engineering, and innovative
+                  construction techniques. Each class blends hands-on workshops
+                  with expert lectures, empowering beavers to transform their
+                  natural talents into architectural masterpieces. Whether your
+                  beaver dreams of building eco-friendly lodges or mastering the
+                  art of glass and steel, our curriculum provides the tools and
+                  inspiration needed to excel in today’s competitive landscape.
+                  Join a community of forward-thinking beavers and give your
+                  companion the skills to shape the future of aquatic
+                  architecture.
                 </p>
               </div>
               <div className="text-white space-y-2 font-bold mt-4">
-                <p>Phone: (123) 456-7890</p>
-                <p>Email: contact@purrfectfit.com</p>
+                <p>
+                  Disclaimer: All classes require a beaver high school diploma
+                  or GED equivalent. Classes are not accredited.
+                </p>
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3  gap-6 px-4 my-4">
+          {/* <div className="grid grid-cols-2 md:grid-cols-3  gap-6 px-4 my-4">
             <div className="bg-purple-200 p-6 rounded-md flex flex-col justify-evenly">
               <h3 className="text-2xl text-center font-bold mb-2 text-slate-800">
                 Fact One
@@ -139,7 +156,7 @@ export default function ServicesPage() {
                 faucibus ex sapien vitae pellentesque sem placerat.
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="border-b-2 "></div>
         {/* Third */}
@@ -147,34 +164,39 @@ export default function ServicesPage() {
           <div className="grid lg:grid-cols-2 items-center lg:gap-y-6 bg-purple-600">
             <div className="max-lg:order-1 max-lg:text-center sm:p-12 p-8 ">
               <div className="">
-                <h2 className="text-white lilita drop-shadow-2xl text-center lg:text-5xl text-3xl font-bold !leading-tight">
-                  Animal Protection Service
+                <h2 className="text-white lilita drop-shadow-2xl text-center lg:text-3xl text-2xl font-bold !leading-tight">
+                  Peacock Dance Lessons
                 </h2>
                 <p className="text-white mt-6 text-base font-bold leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit.
-                  Quisque faucibus ex sapien vitae pellentesque sem placerat. In
-                  id cursus mi pretium tellus duis convallis. Tempus leo eu
-                  aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus
-                  nec metus bibendum egestas. Iaculis massa nisl malesuada
-                  lacinia integer nunc posuere. Ut hendrerit semper vel class
-                  aptent taciti sociosqu. Ad litora torquent per conubia nostra
-                  inceptos himenaeos.
+                  Step into the spotlight with our exclusive Peacock Dance
+                  Lessons, led by the legendary instructor Phil—an animal dance
+                  maestro with over 25 years of experience inspiring movement in
+                  creatures great and small. Phil’s unwavering compassion and
+                  dedication to the art of dance shine through in every lesson,
+                  ensuring that each peacock discovers its unique rhythm and
+                  grace. Whether your peacock is a beginner or a seasoned
+                  performer, Phil’s expert guidance and innovative techniques
+                  guarantee dazzling results, no matter the challenge. Join a
+                  vibrant community of dancing peacocks and experience the joy,
+                  confidence, and elegance that only Phil’s teaching can
+                  deliver. Give your peacock the gift of movement and let their
+                  true colors shine on the dance floor!
                 </p>
               </div>
-              <div className="text-white space-y-2 font-bold mt-4">
+              {/* <div className="text-white space-y-2 font-bold mt-4">
                 <p>Phone: (123) 456-7890</p>
                 <p>Email: contact@purrfectfit.com</p>
-              </div>
+              </div> */}
             </div>
             <div className="lg:h-[480px] h-full flex items-center">
-              <img
-                src="https://readymadeui.com/team-image.webp"
+              <Image
+                src={peacocksImage}
                 className="w-full h-full object-cover"
                 alt="Dining Experience"
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3  gap-6 px-4 my-4">
+          {/* <div className="grid grid-cols-2 md:grid-cols-3  gap-6 px-4 my-4">
             <div className="bg-purple-200 p-6 rounded-md flex flex-col justify-evenly">
               <h3 className="text-2xl text-center font-bold mb-2 text-slate-800">
                 Fact One
@@ -202,7 +224,7 @@ export default function ServicesPage() {
                 faucibus ex sapien vitae pellentesque sem placerat.
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
