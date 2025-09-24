@@ -12,8 +12,8 @@ export default function Home() {
       <div className="bg-purple-500 py-10 px-6 sm:px-12">
         <div className="max-w-screen-xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-start">
-            <div>
-              <div className="space-y-4 mb-8">
+            <div className="order-1 lg:order-1">
+              <div className="space-y-4 ">
                 <h2 className="text-white text-center drop-shadow-xl lilita xl:text-6xl md:text-5xl text-4xl font-bold ">
                   Everyday Pets.
                 </h2>
@@ -22,7 +22,17 @@ export default function Home() {
                 </h2>
               </div>
 
-              <p className="text-white font-bold text-lg text-center  leading-relaxed">
+              <div className="aspect-[7/4] order-2 lg:order-2 my-4 md:hidden">
+                <Image
+                  alt="Dashboard"
+                  width={500}
+                  height={600}
+                  src={stockAnimals}
+                  className="w-full h-full rounded-full object-contain"
+                />
+              </div>
+
+              <p className="text-white font-bold text-lg text-center mt-4 leading-relaxed">
                 Purrfect Fit is your one-stop destination for premium pet
                 supplies, offering a carefully curated selection for all major
                 pets—from playful pups and curious cats to feathered friends and
@@ -65,13 +75,13 @@ export default function Home() {
                 />
               </div> */}
             </div>
-            <div className="aspect-[7/4]">
+            <div className="aspect-[7/4] order-2 lg:order-2 hidden md:block">
               <Image
                 alt="Dashboard"
                 width={500}
                 height={600}
                 src={stockAnimals}
-                className="shrink-0 w-full h-full rounded-md object-cover"
+                className="w-full h-full rounded-full object-contain"
               />
             </div>
           </div>
