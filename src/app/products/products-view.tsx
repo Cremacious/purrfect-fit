@@ -26,7 +26,6 @@ export default function ProductsView({
   // const [minPrice, setMinPrice] = useState(minParam);
   // const [maxPrice, setMaxPrice] = useState(maxParam);
 
-
   // React.useEffect(() => {
   //   setMinPrice(minParam);
   //   setMaxPrice(maxParam);
@@ -61,6 +60,10 @@ export default function ProductsView({
   //   router.push(`/products?${params.toString()}`);
   // };
 
+  const handleClearFilters = () => {
+    router.push('/products');
+  };
+
   return (
     <div className="flex flex-col md:flex-row">
       <div className="md:hidden p-4">
@@ -76,6 +79,7 @@ export default function ProductsView({
         <div className="flex items-center border-b border-gray-300 pb-2 mb-6">
           <h3 className="text-slate-900 text-lg font-semibold">Filter</h3>
           <button
+            onClick={handleClearFilters}
             type="button"
             className="text-sm text-purple-500 font-semibold ml-auto cursor-pointer"
           >
@@ -99,7 +103,7 @@ export default function ProductsView({
                 htmlFor={animal}
                 className="text-slate-600 font-medium text-sm cursor-pointer"
               >
-                {animal}
+                {animal && animal.charAt(0).toUpperCase() + animal.slice(1)}
               </label>
             </li>
           ))}

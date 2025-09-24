@@ -98,42 +98,47 @@ export default function ProductDetails({ product }: { product: ProductType }) {
               <div className="text-center text-sm w-full font-medium text-slate-800">
                 Click an image to enlarge
               </div>
-              <div className="bg-white shadow-md p-2 w-full max-w-full overflow-auto rounded-2xl border">
-                <div className="flex flex-row gap-4 shrink-0">
-                  {(() => {
-                    const defaultIdx = 0;
-                    const reordered = [
-                      product.images[defaultIdx],
-                      ...product.images.filter((_, idx) => idx !== defaultIdx),
-                    ];
-                    return reordered.map((image) => {
-                      const originalIndex = product.images.findIndex(
-                        (img) => img === image
-                      );
-                      return (
-                        <button
-                          key={originalIndex}
-                          type="button"
-                          onClick={() => openCarousel(originalIndex)}
-                          className={`focus:outline-none ${
-                            originalIndex === mainImageIndex
-                              ? 'border-2 border-purple-500 rounded-lg p-[2px]'
-                              : ''
-                          }`}
-                        >
-                          <Image
-                            src={image}
-                            alt={`Product ${originalIndex + 1}`}
-                            width={64}
-                            height={64}
-                            className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
-                          />
-                        </button>
-                      );
-                    });
-                  })()}
+
+              {product.images.length > 1 && (
+                <div className="bg-white shadow-md p-2 w-full max-w-full overflow-auto rounded-2xl border">
+                  <div className="flex flex-row gap-4 shrink-0">
+                    {(() => {
+                      const defaultIdx = 0;
+                      const reordered = [
+                        product.images[defaultIdx],
+                        ...product.images.filter(
+                          (_, idx) => idx !== defaultIdx
+                        ),
+                      ];
+                      return reordered.map((image) => {
+                        const originalIndex = product.images.findIndex(
+                          (img) => img === image
+                        );
+                        return (
+                          <button
+                            key={originalIndex}
+                            type="button"
+                            onClick={() => openCarousel(originalIndex)}
+                            className={`focus:outline-none ${
+                              originalIndex === mainImageIndex
+                                ? 'border-2 border-purple-500 rounded-lg p-[2px]'
+                                : ''
+                            }`}
+                          >
+                            <Image
+                              src={image}
+                              alt={`Product ${originalIndex + 1}`}
+                              width={64}
+                              height={64}
+                              className="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-lg rounded-md"
+                            />
+                          </button>
+                        );
+                      });
+                    })()}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

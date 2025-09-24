@@ -38,6 +38,12 @@ export default function AddProductForm() {
     resolver: zodResolver(productSchema),
     defaultValues: {
       variants: [],
+      name: '',
+      slug: '',
+      animal: '',
+      category: '',
+      brand: '',
+      description: '',
     },
   });
 
@@ -176,6 +182,7 @@ export default function AddProductForm() {
         setImageFiles([]);
         setImagePreviews([]);
         setDefaultImageIndex(0);
+        form.reset();
       } else {
         toast.error(response.message);
       }

@@ -24,9 +24,9 @@ export default async function ProductPage({
       <div>
         <ProductReviews />
       </div>
-      <div className="max-w-xl mx-auto w-full mt-4 px-2 pb-4">
+      {/* <div className="max-w-xl mx-auto w-full mt-4 px-2 pb-4">
         <ReviewForm />
-      </div>
+      </div> */}
     </div>
   );
 }

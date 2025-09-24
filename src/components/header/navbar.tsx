@@ -23,7 +23,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between w-full">
             {/* Left - Logo */}
             <div className="flex-shrink-0">
-              <Link href="javascript:void(0)" className="max-sm:hidden">
+              <Link href="/" className="max-sm:hidden">
                 <div>
                   <h1 className="lilita text-4xl text-white drop-shadow-lg">
                     Purrfect Fit
@@ -68,12 +68,12 @@ export default function Navbar() {
             <div className="flex items-center gap-x-6 gap-y-4 flex-shrink-0">
               <div className="flex items-center md:space-x-5 space-x-4">
                 <div className="flex flex-col items-center justify-center gap-0.5 cursor-pointer">
-                  <div className="relative">
+                  {/* <div className="relative">
                     <Heart className="cursor-pointer text-white inline w-7 h-7" />
                     <span className="absolute left-auto -ml-1 top-0 rounded-full bg-red-500 px-1 py-0 text-xs text-white">
                       0
                     </span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex flex-col items-center justify-center gap-0.5 cursor-pointer">
                   <Link href="/cart" className="relative">
