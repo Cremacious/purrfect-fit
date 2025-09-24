@@ -11,7 +11,7 @@ export default function ProductGrid({
   return (
     <div className="p-4 md:mt-4">
       <div className="mx-auto lg:max-w-7xl md:max-w-4xl sm:max-w-xl max-sm:max-w-sm">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 mb-6 sm:mb-8 md:text-left text-center">
+        <h2 className="text-2xl lilita  sm:text-3xl font-semibold drop-shadow-2xl text-purple-900 mb-6 sm:mb-8 md:text-left text-center">
           {animal
             ? `Products For ${animal.charAt(0).toUpperCase() + animal.slice(1)}`
             : 'All Products'}

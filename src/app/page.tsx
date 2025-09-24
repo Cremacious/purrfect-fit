@@ -1,11 +1,15 @@
 import Image from 'next/image';
-import stockAnimals from '@/assets/stock-animals.jpg';
+import stockAnimals from '@/assets/hero3.png';
 import ProductRow from '@/components/products/product-row';
+import tacticalKingdom from '@/assets/brand-logos/tactical-kingdom-high-resolution-logo-transparent.png';
+import pawgenics from '@/assets/brand-logos/pawgenics-high-resolution-logo-transparent.png';
+import wildWears from '@/assets/brand-logos/wild-wears-high-resolution-logo-transparent.png';
+import fetchfind from '@/assets/brand-logos/fetch-high-resolution-logo-transparent.png';
 
 export default function Home() {
   return (
-    <div className="bg-white">
-      <div className="bg-purple-500 py-14 px-6 sm:px-12">
+    <div className="bg-purple-300">
+      <div className="bg-purple-500 py-10 px-6 sm:px-12">
         <div className="max-w-screen-xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-start">
             <div>
@@ -19,46 +23,89 @@ export default function Home() {
               </div>
 
               <p className="text-white font-bold text-lg text-center  leading-relaxed">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-                faucibus ex sapien vitae pellentesque sem placerat. In id cursus
-                mi pretium tellus duis convallis. Tempus leo eu aenean sed diam
-                urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum
-                egestas. Iaculis massa nisl malesuada lacinia integer nunc
-                posuere. Ut hendrerit semper vel class aptent taciti sociosqu.
+                Purrfect Fit is your one-stop destination for premium pet
+                supplies, offering a carefully curated selection for all major
+                pets—from playful pups and curious cats to feathered friends and
+                small animals. We proudly feature products from the most trusted
+                and popular brands, ensuring your companions receive the very
+                best in nutrition, comfort, and care. Whether you’re shopping
+                for everyday essentials or something special, you’ll find
+                everything you need to keep your pets happy, healthy, and
+                thriving at Purrfect Fit.
               </p>
 
-              <div className="mt-12 flex flex-wrap gap-x-8 gap-y-6">
-                <img
-                  src="https://readymadeui.com/images/brand-logo1.webp"
-                  className="w-32 shrink-0"
+              {/* <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 justify-center items-center">
+                <Image
+                  src={tacticalKingdom}
+                  className=" shrink-0"
                   alt="brand-logo1"
+                  width={150}
+                  height={100}
                 />
-                <img
-                  src="https://readymadeui.com/images/brand-logo2.webp"
-                  className="w-32 shrink-0"
-                  alt="brand-logo2"
+                <Image
+                  src={pawgenics}
+                  className=" shrink-0"
+                  alt="brand-logo1"
+                  width={150}
+                  height={200}
                 />
-                <img
-                  src="https://readymadeui.com/images/brand-logo3.webp"
-                  className="w-32 shrink-0"
-                  alt="brand-logo3"
+                <Image
+                  src={wildWears}
+                  className=" shrink-0"
+                  alt="brand-logo1"
+                  width={120}
+                  height={200}
                 />
-                <img
-                  src="https://readymadeui.com/images/brand-logo4.webp"
-                  className="w-32 shrink-0"
-                  alt="brand-logo4"
+                <Image
+                  src={fetchfind}
+                  className=" shrink-0"
+                  alt="brand-logo1"
+                  width={150}
+                  height={200}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="aspect-[7/4]">
               <Image
                 alt="Dashboard"
                 width={500}
-                height={500}
+                height={600}
                 src={stockAnimals}
                 className="shrink-0 w-full h-full rounded-md object-cover"
               />
             </div>
+          </div>
+        </div>
+        <div className="flex justify-center max-w-7xl mx-auto ">
+          <div className="mt-6 w-full grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 justify-center items-center ">
+            <Image
+              src={tacticalKingdom}
+              className=" shrink-0"
+              alt="brand-logo1"
+              width={150}
+              height={100}
+            />
+            <Image
+              src={pawgenics}
+              className=" shrink-0"
+              alt="brand-logo1"
+              width={150}
+              height={200}
+            />
+            <Image
+              src={wildWears}
+              className=" shrink-0"
+              alt="brand-logo1"
+              width={120}
+              height={200}
+            />
+            <Image
+              src={fetchfind}
+              className=" shrink-0"
+              alt="brand-logo1"
+              width={150}
+              height={200}
+            />
           </div>
         </div>
       </div>

@@ -67,7 +67,11 @@ export default function ProductsView({
   return (
     <div className="flex flex-col md:flex-row">
       <div className="md:hidden p-4">
-        <Button className="w-full" onClick={() => setFiltersOpen(!filtersOpen)}>
+        <Button
+          variant={'purple'}
+          className="w-full font-bold"
+          onClick={() => setFiltersOpen(!filtersOpen)}
+        >
           {filtersOpen ? 'Hide Filters' : 'Show Filters'}
         </Button>
       </div>
