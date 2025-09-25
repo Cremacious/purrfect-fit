@@ -112,7 +112,7 @@ export default function Navbar() {
           >
             Fish
           </Link>
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="flex flex-row items-center">
                 <div className="text-xl lilita text-white drop-shadow-lg">
@@ -127,7 +127,7 @@ export default function Navbar() {
               <DropdownMenuItem>Team</DropdownMenuItem>
               <DropdownMenuItem>Subscription</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
           <Link
             href={'/services'}
             className="text-xl lilita text-white drop-shadow-lg"

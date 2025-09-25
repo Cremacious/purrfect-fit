@@ -2,21 +2,39 @@ import Image from 'next/image';
 import turtleImage from '@/assets/service-images/turtles.png';
 import beaversImage from '@/assets/service-images/beavers.png';
 import peacocksImage from '@/assets/service-images/peacocks.png';
+import serviceImage from '@/assets/services.png';
 
 export default function ServicesPage() {
   return (
-    <div className="flex flex-col bg-white max-w-7xl mx-auto my-4 rounded-2xl shadow-lg min-h-screen">
-      <div className="flex flex-col space-y-4 md:mt-8">
-        <h1 className="text-center text-3xl lilita">Services</h1>
-        <div className="max-w-3xl mx-auto">
-          <p className="text-lg font-bold text-slate-800 mb-8 text-center">
-            At Purrfect Fit, we offer more than just products for your beloved
-            pets. Our additional services are designed to make your life easier
-            and your pet&apos;s life happier. Explore our premium offerings
-            below!
-          </p>
+    <div className="flex flex-col bg-purple-100 max-w-7xl mx-auto my-4 rounded-2xl shadow-lg min-h-screen">
+      <div className="max-w-4xl mx-auto p-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-center">
+          <div className="flex items-center justify-center">
+            <Image
+              src={serviceImage}
+              alt="Services"
+              height={300}
+              width={200}
+              className="rounded-2xl w-full h-auto max-h-[350px] object-cover"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-4">
+            <h1 className="text-3xl lilita text-center ">Services</h1>
+            <div className="max-w-3xl mx-auto md:mx-0">
+              <p className="text-lg font-bold text-slate-800 mb-4 text-center ">
+                At Purrfect Fit, we offer more than just products for your
+                beloved pets. Our additional services are designed to make your
+                life easier and your pet&apos;s life happier.
+              </p>
+              <p className="text-lg font-bold text-slate-800 mb-4 text-center ">
+                Explore our premium offerings below!
+              </p>
+            </div>
+          </div>
         </div>
       </div>
+      <div className="border-b-2 mb-8"></div>
       <div className="space-y-12">
         {/* First */}
         <div>

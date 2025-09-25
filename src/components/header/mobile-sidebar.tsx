@@ -5,10 +5,20 @@ import Link from 'next/link';
 import { X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { UserRound } from 'lucide-react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function MobileSidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const handleButtonClick = (path: string) => {
+    setIsOpen(!isOpen);
+    router.push(path);
+  };
+
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger>
         <Menu className="text-white h-8 w-8" />
       </SheetTrigger>
@@ -22,7 +32,7 @@ export default function MobileSidebar() {
               <X className="text-white h-8 w-8" />
             </SheetTrigger>
           </div>
-
+          {/* 
           <div className="border-b-2 border-purple-400 mx-8">
             <div className="grid grid-cols-2 gap-2 my-2 mx-6">
               <div className=" text-white font-bold p-2 rounded-xl bg-purple-400 text-center">
@@ -32,51 +42,58 @@ export default function MobileSidebar() {
                 Settings
               </div>
             </div>
-          </div>
+          </div> */}
 
           <nav className="flex flex-col gap-2 mt-2 px-6">
             <Link
+              onClick={() => handleButtonClick('/products')}
               href="/products"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               All
             </Link>
             <Link
+              onClick={() => handleButtonClick('/products?animal=cats')}
               href="/products?animal=cats"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               Cats
             </Link>
             <Link
+              onClick={() => handleButtonClick('/products?animal=dogs')}
               href="/products?animal=dogs"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               Dogs
             </Link>
             <Link
+              onClick={() => handleButtonClick('/products?animal=birds')}
               href="/products?animal=birds"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               Birds
             </Link>
             <Link
+              onClick={() => handleButtonClick('/products?animal=fish')}
               href="/products?animal=fish"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               Fish
             </Link>
 
-            <Button className="text-xl lilita text-white text-center py-6 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md">
+            {/* <Button className="text-xl lilita text-white text-center py-6 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md">
               Other Animals
-            </Button>
+            </Button> */}
 
             <Link
+              onClick={() => handleButtonClick('/services')}
               href="/services"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >
               Services
             </Link>
             <Link
+              onClick={() => handleButtonClick('/about')}
               href="/about"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >

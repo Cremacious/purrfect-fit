@@ -14,6 +14,11 @@ import {
 } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
 import { signUp } from '@/lib/auth-client';
+import {
+  getUserCart,
+  mergeGuestCartToUserCart,
+} from '@/lib/actions/cart.actions';
+import { useCartStore } from '@/stores/useCartStore';
 
 export const signUpSchema = z
   .object({
@@ -42,7 +47,10 @@ export default function SignUpForm() {
         email: values.email,
         password: values.password,
       });
-      router.push('/');
+      // await mergeGuestCartToUserCart();
+      // const serverCart = await getUserCart();
+      // useCartStore.setState({ cart: serverCart?.items || [] });
+      router.push('/products');
     } catch (error) {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');

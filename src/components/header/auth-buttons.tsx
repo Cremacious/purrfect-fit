@@ -45,15 +45,15 @@ export default function AuthButtons() {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
+          {/* <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Billing</DropdownMenuItem> */}
 
           {isAdmin && (
             <DropdownMenuItem onClick={() => router.push('/admin')}>
               Admin Panel
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem>Team </DropdownMenuItem>
+          {/* <DropdownMenuItem>Team </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
         </DropdownMenuContent>

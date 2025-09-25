@@ -171,6 +171,70 @@ export async function getCartForOrder() {
   };
 }
 
-export async function mergeGuestCartToUserCart() {}
+export async function mergeGuestCartToUserCart() {
+  try {
+    const { user } = await getAuthenticatedUser();
+    if (!user) return;
 
-export async function clearCartServer() {}
+    const cookiesStore = await cookies();
+    const cartCookie = cookiesStore.get('cart')?.value;
+    if (!cartCookie) return;
+    const guestItems = JSON.parse(cartCookie);
+
+    const cart = await prisma.cart.findFirst({ where: { userId: user.id } });
+    const userItems: CartItemType[] =
+      cart && Array.isArray(cart.items) ? (cart.items as CartItemType[]) : [];
+
+    for (const guestItem of guestItems) {
+      const product = await prisma.product.findUnique({
+        where: { id: guestItem.id },
+      });
+      if (!product) continue;
+      const idx = userItems.findIndex(
+        (i) =>
+          i.id === guestItem.id &&
+          i.optionA === guestItem.optionA &&
+          i.optionB === guestItem.optionB
+      );
+      const maxQty = product.stock;
+      if (idx > -1) {
+        userItems[idx].quantity = Math.min(
+          (userItems[idx].quantity || 0) + (guestItem.quantity || 1),
+          maxQty
+        );
+      } else {
+        userItems.push({
+          ...guestItem,
+          quantity: Math.min(guestItem.quantity || 1, maxQty),
+        });
+      }
+    }
+
+    await prisma.cart.upsert({
+      where: cart ? { id: cart.id } : { id: '' },
+      update: { items: convertToPlainObject(userItems) },
+      create: {
+        userId: user.id,
+        items: convertToPlainObject(userItems),
+        itemsPrice: 0,
+        taxPrice: 0,
+        totalPrice: 0,
+      },
+    });
+
+    cookiesStore.set('cart', '', { httpOnly: true, maxAge: 0 });
+  } catch (error) {
+    console.error('Error merging guest cart to user cart:', error);
+  }
+}
+
+export async function clearCartServer() {
+  try {
+    const { user } = await getAuthenticatedUser();
+    if (!user) return;
+
+    await prisma.cart.deleteMany({ where: { userId: user.id } });
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+  }
+}
