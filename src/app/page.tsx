@@ -87,7 +87,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex justify-center max-w-7xl mx-auto ">
-          <div className="mt-6 w-full grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 justify-center items-center ">
+          <div className="mt-6 w-full grid grid-cols-2 md:grid-cols-4  gap-y-6 justify-center items-center ">
             <Image
               src={tacticalKingdom}
               className=" shrink-0"
