@@ -37,12 +37,12 @@ export default function ProductCard({ product }: { product: ProductType }) {
       <p className="text-slate-800 text-[13px] line-clamp-3 mt-2">{product.description}</p>
 
       <div className="flex flex-row items-center gap-2 mt-6  w-full">
-        <div
+        {/* <div
           className="bg-purple-200 hover:bg-purple-300 w-12 h-9 flex items-center justify-center rounded-lg cursor-pointer flex-shrink-0"
           title="Wishlist"
         >
           <Heart className="text-purple-600" />
-        </div>
+        </div> */}
         <Button asChild variant={'purple'} className="flex-1 min-w-0 font-bold">
           <Link href={`/product/${product.slug}`}>View</Link>
         </Button>

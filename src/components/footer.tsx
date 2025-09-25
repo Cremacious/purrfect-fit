@@ -40,7 +40,7 @@ export default function Footer() {
           <h6 className="text-[15px] text-slate-300">
             Stay connected with us:
           </h6>
-          <ul className="flex flex-wrap justify-center gap-x-6 ga-y-3 gap-4 mt-6">
+          {/* <ul className="flex flex-wrap justify-center gap-x-6 ga-y-3 gap-4 mt-6">
             <li>
               <a href="javascript:void(0)">
                 <svg
@@ -146,11 +146,11 @@ export default function Footer() {
                 </svg>
               </a>
             </li>
-          </ul>
+          </ul> */}
         </div>
         <div className="border-t border-gray-600 pt-6 mt-12">
           <p className="text-[15px] text-slate-300">
-            © ReadymadeUI. All rights reserved.
+            {/* © ReadymadeUI. All rights reserved. */}
           </p>
         </div>
       </div>

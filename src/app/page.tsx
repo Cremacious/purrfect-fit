@@ -5,6 +5,8 @@ import tacticalKingdom from '@/assets/brand-logos/tactical-kingdom-high-resoluti
 import pawgenics from '@/assets/brand-logos/pawgenics-high-resolution-logo-transparent.png';
 import wildWears from '@/assets/brand-logos/wild-wears-high-resolution-logo-transparent.png';
 import fetchfind from '@/assets/brand-logos/fetch-high-resolution-logo-transparent.png';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
   return (
@@ -86,7 +88,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center max-w-7xl mx-auto ">
+        {/* <div className="flex justify-center max-w-7xl mx-auto ">
           <div className="mt-6 w-full grid grid-cols-2 md:grid-cols-4  gap-y-6 justify-center items-center ">
             <Image
               src={tacticalKingdom}
@@ -117,14 +119,75 @@ export default function Home() {
               height={200}
             />
           </div>
+        </div> */}
+      </div>
+      <div className="mt-8 flex flex-col justify-center items-center">
+        <Badge className="bg-purple-500">
+          <div className="text-white drop-shadow-2xl lilita xl:text-4xl md:text-3xl text-2xl font-bold !leading-tight text-center">
+            Search Brand
+          </div>
+        </Badge>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 max-w-7xl mx-auto ">
+          <Link
+            href={'/products?brand=Tactical+Kingdom'}
+            className="bg-white p-4 rounded-2xl flex items-center justify-center h-40 md:h-48"
+          >
+            <Image
+              src={tacticalKingdom}
+              alt="brand-logo1"
+              width={250}
+              height={150}
+              className="object-contain max-w-full max-h-full"
+            />
+          </Link>
+          <Link
+            href={'/products?brand=Pawgenic'}
+            className="bg-white p-4 rounded-2xl flex items-center justify-center h-40 md:h-48"
+          >
+            <Image
+              src={pawgenics}
+              alt="brand-logo1"
+              width={250}
+              height={150}
+              className="object-contain max-w-full max-h-full"
+            />
+          </Link>
+          <Link
+            href={'/products?brand=Wild+Wears'}
+            className="bg-white p-4 rounded-2xl flex items-center justify-center h-40 md:h-48"
+          >
+            <Image
+              src={wildWears}
+              alt="brand-logo1"
+              width={250}
+              height={150}
+              className="object-contain max-w-full max-h-full"
+            />
+          </Link>
+          <Link
+            href={'/products?brand=Fetch%26Find'}
+            className="bg-white p-4 rounded-2xl flex items-center justify-center h-40 md:h-48"
+          >
+            <Image
+              src={fetchfind}
+              alt="brand-logo1"
+              width={250}
+              height={150}
+              className="object-contain max-w-full max-h-full"
+            />
+          </Link>
         </div>
       </div>
-      <div className="">
-        <h2 className="text-slate-800 xl:text-4xl md:text-3xl text-2xl font-bold !leading-tight">
-          Explore Our Products
-        </h2>
-        <div className="max-w-7xl mx-auto p-2">
-          <ProductRow />
+      <div className="bg-purple-600 my-8 py-4 flex flex-col justify-center items-center">
+        <Badge className="bg-purple-500 px-2 mt-4 ">
+          <h2 className="text-white drop-shadow-2xl lilita xl:text-4xl md:text-3xl text-2xl font-bold !leading-tight text-center">
+            Latest Products
+          </h2>
+        </Badge>
+        <div className="">
+          <div className="max-w-7xl mx-auto p-2">
+            <ProductRow />
+          </div>
         </div>
       </div>
     </div>
