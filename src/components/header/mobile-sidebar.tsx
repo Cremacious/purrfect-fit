@@ -27,9 +27,7 @@ export default function MobileSidebar() {
       <SheetTrigger>
         <Menu className="text-white h-8 w-8" />
       </SheetTrigger>
-      <SheetContent
-        className="bg-purple-500 border-0 px-0 pt-0"
-      >
+      <SheetContent className="bg-purple-500 border-0 px-0 pt-0 [&>button]:hidden">
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between px-6 py-4">
             <span className="lilita text-2xl text-white drop-shadow-lg">

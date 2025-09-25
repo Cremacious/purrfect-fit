@@ -1,5 +1,7 @@
 import FAQ from './faq';
 import ContactForm from './contact';
+import Image from 'next/image';
+import serviceImage from '@/assets/services.png';
 
 export default function AboutPage() {
   return (
@@ -37,10 +39,13 @@ export default function AboutPage() {
             </p>
           </div>
           <div>
-            <img
-              src="https://readymadeui.com/images/kpis-dashboard-img.webp"
+            <Image
+              src={serviceImage}
               alt="hero Image"
-              className="rounded-lg object-contain w-full h-full"
+              className="rounded-lg object-contain "
+              width={400}
+              height={400}
+              priority
             />
           </div>
         </div>
