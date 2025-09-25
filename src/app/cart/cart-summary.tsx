@@ -3,11 +3,28 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useCartStore } from '@/stores/useCartStore';
+import { useState } from 'react';
+import { createOrUpdatePendingOrder } from '@/lib/actions/order.actions';
+import { useRouter } from 'next/navigation';
 
 export default function CartSummary() {
+  const router = useRouter();
   const subtotal = useCartStore((state) => state.calcCartSubtotal());
   const shippingPrice = 15;
   const subtotalWithShipping = subtotal + shippingPrice;
+  const [creatingOrder, setCreatingOrder] = useState(false);
+
+  const handleCheckout = async () => {
+    try {
+      setCreatingOrder(true);
+      const response = await createOrUpdatePendingOrder();
+      const orderId = response.id;
+      router.push(`/checkout/${orderId}`);
+    } catch (error) {
+      console.error('Error creating order:', error);
+      setCreatingOrder(false);
+    }
+  };
   return (
     <div className="bg-purple-100 rounded-md p-4 h-max">
       <ul className="text-slate-800 font-medium mt-6 space-y-4">
@@ -38,8 +55,13 @@ export default function CartSummary() {
         </li>
       </ul>
       <div className="mt-8 space-y-3">
-        <Button asChild type="button" className="w-full" variant={'purple'}>
-          <Link href={'/checkout'}>Checkout</Link>
+        <Button
+          disabled={creatingOrder}
+          onClick={handleCheckout}
+          className="w-full"
+          variant={'purple'}
+        >
+          {creatingOrder ? 'Creating Order...' : 'Go to Checkout'}
         </Button>
         <Button asChild type="button" className="w-full" variant={'white'}>
           <Link href={'/products'}>Continue Shopping</Link>

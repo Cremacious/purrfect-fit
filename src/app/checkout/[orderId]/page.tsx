@@ -1,7 +1,7 @@
 import { getUserCart } from '@/lib/actions/cart.actions';
 import CheckoutItem from './checkout-item';
 import { CartItemType } from '@/lib/types/cart.type';
-import {redirect} from "next/navigation";
+import { redirect } from 'next/navigation';
 
 export default async function CheckoutPage() {
   const userCart = await getUserCart();
@@ -14,7 +14,6 @@ export default async function CheckoutPage() {
     redirect('/cart');
   }
 
-
   return (
     <div className="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 rounded-2xl shadow-lg my-4">
       <div className="sm:px-8 px-4 py-6">
@@ -23,9 +22,11 @@ export default async function CheckoutPage() {
             <div className="relative">
               <div className="md:overflow-auto ">
                 <div className="space-y-4">
-                  {/* Cart Items Here */}
                   {userCart.items
-                    .filter((item): item is CartItemType => item !== null && item !== undefined)
+                    .filter(
+                      (item): item is CartItemType =>
+                        item !== null && item !== undefined
+                    )
                     .map((item) => (
                       <CheckoutItem key={item.id} item={item} />
                     ))}
@@ -36,13 +37,13 @@ export default async function CheckoutPage() {
                     <li className="flex flex-wrap gap-4 text-sm">
                       Subtotal
                       <span className="ml-auto font-semibold text-slate-900">
-                        $102.00
+                        ${userCart.itemsPrice.toFixed(2)}
                       </span>
                     </li>
                     <li className="flex flex-wrap gap-4 text-sm">
                       Shipping
                       <span className="ml-auto font-semibold text-slate-900">
-                        $6.00
+                        $15.00
                       </span>
                     </li>
                     <li className="flex flex-wrap gap-4 text-sm">
@@ -53,7 +54,10 @@ export default async function CheckoutPage() {
                     </li>
                     <hr className="border-slate-300" />
                     <li className="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">
-                      Total <span className="ml-auto">$113.00</span>
+                      Total{' '}
+                      <span className="ml-auto">
+                        {userCart.itemsPrice.add(20).toFixed(2)}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -252,7 +256,7 @@ export default async function CheckoutPage() {
                     </button>
                     <button
                       type="button"
-                      className="rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                      className="rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
                     >
                       Complete Purchase
                     </button>

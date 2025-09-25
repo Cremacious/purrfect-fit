@@ -36,6 +36,12 @@ export default function MobileSidebar() {
 
           <nav className="flex flex-col gap-2 mt-2 px-6">
             <Link
+              href="/products"
+              className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
+            >
+              All
+            </Link>
+            <Link
               href="/products?animal=cats"
               className="text-xl lilita text-white text-center py-3 px-4 rounded-lg bg-purple-400 transition font-bold shadow-md"
             >

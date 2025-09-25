@@ -42,12 +42,12 @@ export async function createOrUpdatePendingOrder() {
               productId: item.id,
               name: item.name,
               price: item.price,
-              
+
               quantity: item.quantity,
               image: item.image || '',
-              optionA: item.optionA || '', // Provide default or actual value
-              optionB: item.optionB || '', // Provide default or actual value
-              product: undefined, // Or provide the related product object if required
+              optionA: item.optionA || '',
+              optionB: item.optionB || '',
+              product: undefined,
             })),
           },
         },
@@ -79,8 +79,10 @@ export async function createOrUpdatePendingOrder() {
               productId: item.id,
               name: item.name,
               price: item.price,
-              color: item.color,
-              size: item.size,
+              optionA: item.optionA || '',
+              optionB: item.optionB || '',
+              product: undefined,
+
               quantity: item.quantity,
               image: item.image || '',
             })),
