@@ -134,7 +134,7 @@ export default function AddProductForm() {
     setImageFiles((prev) => [...prev, ...files]);
     setImagePreviews((prev) => {
       const updated = [...prev, ...compressedPreviews];
-      form.setValue('images', updated); // keep form in sync
+      form.setValue('images', updated); 
       return updated;
     });
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -144,7 +144,7 @@ export default function AddProductForm() {
     setImageFiles((prev) => prev.filter((_, i) => i !== idx));
     setImagePreviews((prev) => {
       const updated = prev.filter((_, i) => i !== idx);
-      form.setValue('images', updated); // keep form in sync
+      form.setValue('images', updated); 
       return updated;
     });
     if (defaultImageIndex === idx) setDefaultImageIndex(0);

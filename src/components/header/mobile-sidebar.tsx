@@ -1,5 +1,10 @@
 'use client';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
 import { Menu, User } from 'lucide-react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
@@ -22,15 +27,19 @@ export default function MobileSidebar() {
       <SheetTrigger>
         <Menu className="text-white h-8 w-8" />
       </SheetTrigger>
-      <SheetContent className="bg-purple-500 border-0 px-0 pt-0">
+      <SheetContent
+        className="bg-purple-500 border-0 px-0 pt-0"
+      >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between px-6 py-4">
             <span className="lilita text-2xl text-white drop-shadow-lg">
               Purrfect Fit
             </span>
-            <SheetTrigger>
-              <X className="text-white h-8 w-8" />
-            </SheetTrigger>
+            <SheetClose asChild>
+              <button aria-label="Close" className="p-1">
+                <X className="text-white h-8 w-8" />
+              </button>
+            </SheetClose>
           </div>
           {/* 
           <div className="border-b-2 border-purple-400 mx-8">

@@ -34,14 +34,14 @@ export default function Navbar() {
                   </p> */}
                 </div>
               </Link>
-              <Link href="javascript:void(0)" className="hidden max-sm:block">
+              <Link href="/" className="hidden max-sm:block">
                 <div>
                   <h1 className="lilita text-3xl text-white drop-shadow-lg">
                     Purrfect Fit
                   </h1>
-                  <p className="text-white lilita text-xs -mt-1 drop-shadow-lg text-center">
+                  {/* <p className="text-white lilita text-xs -mt-1 drop-shadow-lg text-center">
                     Everyday Pets & Clothes
-                  </p>
+                  </p> */}
                 </div>
               </Link>
             </div>
